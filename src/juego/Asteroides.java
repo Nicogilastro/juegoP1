@@ -27,10 +27,6 @@ public class Asteroides {
 		return new Rectangle((int) this.x, (int) this.y, 20, 20);
 	}
 	
-	public void dibujar(Entorno entorno) {
-		entorno.dibujarImagen(imagenAst, this.x, this.y, -1.55, 1);
-	}
-
 	public void mover(int mod) {
 		y += velocidad * Math.sin(angulo);
 		x += velocidad * Math.cos(angulo) * mod;

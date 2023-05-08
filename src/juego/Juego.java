@@ -3,6 +3,9 @@ package juego;
 import java.awt.Color;
 import java.util.Random;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
@@ -14,6 +17,8 @@ public class Juego extends InterfaceJuego
 	Spaceship navecita;
 	Asteroides asteroide;
 	Asteroides[] asteroidesArr;
+	Destructores[] destructoresArr;
+	Destructores destructor;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -36,13 +41,30 @@ public class Juego extends InterfaceJuego
 		    rand = random.nextInt(4, 7);
 		    if(rand !=0) break;
 		}
-		
+//		array de asteroides
 		asteroidesArr = new Asteroides[rand];
 		
 		for(int i=1; i <= rand; i++) {
 			asteroide = new Asteroides(random.nextInt(0, 800), random.nextInt(0, 200), 1, Math.PI/4, 30);
 			asteroidesArr[i-1] = asteroide;
 		}
+		
+//		genera un numero random de destructores	
+		
+		Random random2 = new Random();
+		int rand2 = 0;
+		while (true){
+		    rand2 = random2.nextInt(4, 7);
+		    if(rand !=0) break;
+		}
+//		array de destructores
+		destructoresArr = new Destructores[rand2];
+		
+		for(int i=1; i <= rand2; i++) {
+			destructor = new Destructores(random.nextInt(0, 800), random.nextInt(0, 200), 1);
+			destructoresArr[i-1] = destructor;
+		}
+
 		
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -60,6 +82,8 @@ public class Juego extends InterfaceJuego
 		// Procesamiento de un instante de tiempo
 		// ...
 		
+//		Comportamiento de las teclas
+		
 		if (entorno.estaPresionada(entorno.TECLA_ESPACIO))
 			navecita.disparar();
 		
@@ -69,8 +93,10 @@ public class Juego extends InterfaceJuego
 		if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada('a'))
 			navecita.moverIzquierda(entorno);
 		
+//		dibujo la nave
 		navecita.dibujarse(entorno);
 		
+//		dibujo cada asteroide
 		for(int i=1; i <= asteroidesArr.length; i++) {
 			if(asteroidesArr[i-1] == null) {
 				continue;
@@ -81,11 +107,43 @@ public class Juego extends InterfaceJuego
 			}
 		}
 		
+//		dibujo cada destructor
+
+		for(int i=1; i <= destructoresArr.length; i++) {
+			if(destructoresArr[i-1] == null) {
+				continue;
+			} else {
+				destructoresArr[i-1].dibujarse(entorno);
+			
+			}
+		}
+
+	    for(int i=1; i <= destructoresArr.length; i++) {
+			if(destructoresArr[i-1] == null) {
+				continue;
+			} else {
+				if(i % 2 == 0)
+					destructoresArr[i-1].mover(1.5);
+				else 
+					destructoresArr[i-1].mover(1.5);
+				
+			}
+		}
+
+		
+// muevo los destructores		
+		
+		
+		
+//		dibujo lost textos
+//		vidas
 		entorno.cambiarFont("Arial", 18, Color.white);
 		entorno.escribirTexto("Vidas: " + navecita.getVidas(), 50, 50);
 
 		asteroide.colision(navecita, asteroidesArr);
+		destructor.colision(navecita, destructoresArr);
 		
+//		estado de la navecita vidas, proyectiles etc
 		if(navecita.getVidas() == 0) {
 			System.exit(0);
 		}
