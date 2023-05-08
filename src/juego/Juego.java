@@ -1,13 +1,19 @@
 package juego;
 
+import java.awt.Color;
+import java.util.Random;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 import entorno.InterfaceJuego;
 
 public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
+	Spaceship navecita;
+	Asteroides asteroide;
+	Asteroides[] asteroidesArr;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -15,19 +21,34 @@ public class Juego extends InterfaceJuego
 	Juego()
 	{
 		// Inicializa el objeto entorno
-		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
+		this.entorno = new Entorno(this, "Lost Galaxian - Grupo 3 - v1", 800, 600);
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
 		
-		String imagen = ""
+		navecita = new Spaceship(entorno.ancho()/2, entorno.alto() - 100, 3, 2);
 		
-		AstroMegaShip Navecita = new AstroMegaShip(5, imagen)
-
+//		genera un numero random de asteroides		
+		
+		Random random = new Random();
+		int rand = 0;
+		while (true){
+		    rand = random.nextInt(4, 7);
+		    if(rand !=0) break;
+		}
+		
+		asteroidesArr = new Asteroides[rand];
+		
+		for(int i=1; i <= rand; i++) {
+			asteroide = new Asteroides(random.nextInt(0, 800), random.nextInt(0, 200), 1, Math.PI/4, 30);
+			asteroidesArr[i-1] = asteroide;
+		}
+		
 		// Inicia el juego!
 		this.entorno.iniciar();
+		
 	}
-
+	
 	/**
 	 * Durante el juego, el método tick() será ejecutado en cada instante y 
 	 * por lo tanto es el método más importante de esta clase. Aquí se debe 
@@ -39,10 +60,38 @@ public class Juego extends InterfaceJuego
 		// Procesamiento de un instante de tiempo
 		// ...
 		
+		if (entorno.estaPresionada(entorno.TECLA_ESPACIO))
+			navecita.disparar();
+		
+		if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada('d'))
+			navecita.moverDerecha(entorno);
 
-	}
+		if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada('a'))
+			navecita.moverIzquierda(entorno);
+		
+		navecita.dibujarse(entorno);
+		
+		for(int i=1; i <= asteroidesArr.length; i++) {
+			if(asteroidesArr[i-1] == null) {
+				continue;
+			} else {
+				asteroidesArr[i-1].dibujarse(entorno);
+				asteroidesArr[i-1].mover(i%2 == 0 ? 1 : -1);
+				
+			}
+		}
+		
+		entorno.cambiarFont("Arial", 18, Color.white);
+		entorno.escribirTexto("Vidas: " + navecita.getVidas(), 50, 50);
+
+		asteroide.colision(navecita, asteroidesArr);
+		
+		if(navecita.getVidas() == 0) {
+			System.exit(0);
+		}
 	
-
+	}	
+	
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
