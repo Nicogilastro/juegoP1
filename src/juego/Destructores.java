@@ -12,6 +12,37 @@ public class Destructores {
 	private double velocidad;
 	private int movimiento = 0;
 	
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getVelocidad() {
+		return velocidad;
+	}
+
+	public void setVelocidad(double velocidad) {
+		this.velocidad = velocidad;
+	}
+
+	public int getMovimiento() {
+		return movimiento;
+	}
+
+	public void setMovimiento(int movimiento) {
+		this.movimiento = movimiento;
+	}
 	
 	Image imagenDest = Herramientas.cargarImagen("destructor.png");;
 	
@@ -20,22 +51,18 @@ public class Destructores {
 		this.y = y;
 		this.velocidad = velocidad;
 	}
-	
-	public Rectangle destHitBox() {
-		return new Rectangle((int) this.x, (int) this.y, 20, 20);
-	}
 
 	public void mover(double mod) {
-		if(movimiento == 100) {
-			movimiento = -100;
+		if(movimiento == 50) {
+			movimiento = -50;
 		}
 		
-		if(movimiento < 100 && movimiento >= 0) {
+		if(movimiento < 50 && movimiento >= 0) {
 			x = x + mod;
 			movimiento += 1;
 		} 
 		
-		if(movimiento < 0 && movimiento >= -100) {
+		if(movimiento < 0 && movimiento >= -50) {
 			x = x - mod;
 			movimiento += 1;
 		}
@@ -52,16 +79,26 @@ public class Destructores {
 		
 	}
 	
-	public Rectangle destrucoresHitbox() {
+	public Rectangle destructoresHitbox() {
 		return new Rectangle((int) this.x,(int) this.y, 20, 20);
 	}
+	
+	public void fueraDePantalla(int x, int y) {
+	    if(this.getX() > x + 70) {
+	    	this.setX(x - 90);
+	    }
+	    
+	    if (this.getX() < x - 70) {
+	    	this.setX(this.getX() + 80);
+	    }
+	}
 
-	public boolean colision(Spaceship navecita, Destructores[] destrucoresArr) {
-		for(int i = 0; i < destrucoresArr.length; i++) {
-			if(destrucoresArr[i] != null) {
-				if(navecita.navecitaHitbox().intersects(destrucoresArr[i].destrucoresHitbox())) {
-					destrucoresArr[i] = null;
+	public boolean colision(Spaceship navecita, Destructores[] destructoresArr) {
+		for(int i = 0; i < destructoresArr.length; i++) {
+			if(destructoresArr[i] != null) {
+				if(navecita.navecitaHitbox().intersects(destructoresArr[i].destructoresHitbox())) {
 					int navecitaVidas = navecita.getVidas();
+					destructoresArr[i] = null;
 					navecitaVidas -= 1;
 					navecita.setVidas(navecitaVidas);
 					return true;
@@ -69,5 +106,33 @@ public class Destructores {
 			}
 		}
 		return false;
+	}
+	
+	public void superponen(Destructores[] destructoresArr, Asteroides[] asteroidesArr) {
+		for(int i = 0; i < destructoresArr.length; i++) {
+			for(int j = 0; j < asteroidesArr.length; j++) {
+				if(destructoresArr[i] == null || asteroidesArr[j] == null) {
+					continue;
+				} else {
+					if(destructoresArr[i].destructoresHitbox().intersects(asteroidesArr[j].asteroideHitbox())) {
+						destructoresArr[i].setY(destructoresArr[i].getY() - 30);
+					}
+				}
+				
+			}
+		}
+		for(int i = 0; i < destructoresArr.length; i++) {
+			if(destructoresArr[i] == null) {
+				continue;
+			} else {
+				try {
+					if(destructoresArr[i].destructoresHitbox().intersects(destructoresArr[i+1].destructoresHitbox())) {
+						destructoresArr[i+1].setY(destructoresArr[i+1].getY() - 30);
+					}
+				} catch (Exception e) {
+					continue;
+				}
+			}
+		}
 	}
 }

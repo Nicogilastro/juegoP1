@@ -13,7 +13,32 @@ public class Asteroides {
 	private double angulo;
 	private int radio;
 	
-	Image imagenAst = Herramientas.cargarImagen("asteroide.png");;
+	Image imagenAst = Herramientas.cargarImagen("asteroide.png");
+	
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getVelocidad() {
+		return velocidad;
+	}
+
+	public void setVelocidad(double velocidad) {
+		this.velocidad = velocidad;
+	}
 	
 	public Asteroides(double x, double y, double velocidad, double angulo, int radio) {
 		this.x = x;
@@ -71,5 +96,6 @@ public class Asteroides {
 		}
 		return false;
 	}
+
 
 }

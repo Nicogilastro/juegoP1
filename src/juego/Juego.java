@@ -61,8 +61,10 @@ public class Juego extends InterfaceJuego
 		destructoresArr = new Destructores[rand2];
 		
 		for(int i=1; i <= rand2; i++) {
-			destructor = new Destructores(random.nextInt(0, 800), random.nextInt(0, 200), 1);
+			destructor = new Destructores(random.nextInt(rand2*5, 800), random.nextInt(rand2*3, 300), 1);
+			destructor.fueraDePantalla(random.nextInt(rand2*5, 800), random.nextInt(rand2*3, 300));
 			destructoresArr[i-1] = destructor;
+			
 		}
 
 		
@@ -97,12 +99,12 @@ public class Juego extends InterfaceJuego
 		navecita.dibujarse(entorno);
 		
 //		dibujo cada asteroide
-		for(int i=1; i <= asteroidesArr.length; i++) {
-			if(asteroidesArr[i-1] == null) {
+		for(int i=0; i < asteroidesArr.length; i++) {
+			if(asteroidesArr[i] == null) {
 				continue;
 			} else {
-				asteroidesArr[i-1].dibujarse(entorno);
-				asteroidesArr[i-1].mover(i%2 == 0 ? 1 : -1);
+				asteroidesArr[i].dibujarse(entorno);
+				asteroidesArr[i].mover(i%2 == 0 ? 1 : -1);
 				
 			}
 		}
@@ -114,18 +116,20 @@ public class Juego extends InterfaceJuego
 				continue;
 			} else {
 				destructoresArr[i-1].dibujarse(entorno);
-			
+				
 			}
 		}
 
-	    for(int i=1; i <= destructoresArr.length; i++) {
-			if(destructoresArr[i-1] == null) {
+//		muevo los destructores de izq a der
+
+	    for(int i=0; i < destructoresArr.length; i++) {
+			if(destructoresArr[i] == null) {
 				continue;
 			} else {
 				if(i % 2 == 0)
-					destructoresArr[i-1].mover(1.5);
+					destructoresArr[i].mover(1.5);
 				else 
-					destructoresArr[i-1].mover(1.5);
+					destructoresArr[i].mover(1.5);
 				
 			}
 		}
@@ -142,6 +146,8 @@ public class Juego extends InterfaceJuego
 
 		asteroide.colision(navecita, asteroidesArr);
 		destructor.colision(navecita, destructoresArr);
+		destructor.superponen(destructoresArr, asteroidesArr);
+
 		
 //		estado de la navecita vidas, proyectiles etc
 		if(navecita.getVidas() == 0) {
