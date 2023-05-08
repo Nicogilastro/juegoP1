@@ -26,7 +26,7 @@ public class Juego extends InterfaceJuego
 	Juego()
 	{
 		// Inicializa el objeto entorno
-		this.entorno = new Entorno(this, "Lost Galaxian - Grupo 3 - v1", 800, 600);
+		this.entorno = new Entorno(this, "Lost Galaxian - Grupo 3 - v1", 600, 1600);
 		
 		// Inicializar lo que haga falta para el juego
 		// ...

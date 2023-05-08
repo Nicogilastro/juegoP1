@@ -13,7 +13,7 @@ public class Asteroides {
 	private double angulo;
 	private int radio;
 	
-	Image imagenAst = Herramientas.cargarImagen("asteroide.png");
+	Image imagenAst = Herramientas.cargarImagen("Asteroid.gif");
 	
 
 	public double getX() {
@@ -66,7 +66,7 @@ public class Asteroides {
 	}
 	
 	public void dibujarse(Entorno entorno) {
-		entorno.dibujarImagen(imagenAst, this.x, this.y, -1.55, 0.3);
+		entorno.dibujarImagen(imagenAst, this.x, this.y, -1.55, 0.05);
 		
 	}
 
