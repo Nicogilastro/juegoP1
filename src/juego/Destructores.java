@@ -75,7 +75,7 @@ public class Destructores {
 	}
 	
 	public void dibujarse(Entorno entorno) {
-		entorno.dibujarImagen(imagenDest, this.x, this.y, 0, 0.3);
+		entorno.dibujarImagen(imagenDest, this.x, this.y, 0, 0.4);
 		
 	}
 	

@@ -22,11 +22,11 @@ public class Spaceship {
 		this.y = y;
 		this.vidas = vidas;
 		this.velocidad = velocidad;
-		img1 = Herramientas.cargarImagen("nave2.png");
+		img1 = Herramientas.cargarImagen("nave.png");
 	}
 	
 	public void dibujarse(Entorno entorno) {
-		entorno.dibujarImagen(img1, this.x, this.y, -1.55, 0.3);
+		entorno.dibujarImagen(img1, this.x, this.y, 0, 1.25);
 		
 	}
 	
