@@ -19,6 +19,7 @@ public class Juego extends InterfaceJuego
 	Asteroides[] asteroidesArr;
 	Destructores[] destructoresArr;
 	Destructores destructor;
+	fondo fondo;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -32,6 +33,7 @@ public class Juego extends InterfaceJuego
 		// ...
 		
 		navecita = new Spaceship(entorno.ancho()/2, entorno.alto() - 100, 3, 2);
+	
 		
 //		genera un numero random de asteroides		
 		
@@ -67,7 +69,7 @@ public class Juego extends InterfaceJuego
 			
 		}
 
-		
+		fondo = new fondo(entorno,this);
 		// Inicia el juego!
 		this.entorno.iniciar();
 		
@@ -153,7 +155,8 @@ public class Juego extends InterfaceJuego
 		if(navecita.getVidas() == 0) {
 			System.exit(0);
 		}
-	
+//		dibujo el fondo
+		//fondo.dibujar(entorno);
 	}	
 	
 	@SuppressWarnings("unused")
