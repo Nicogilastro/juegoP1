@@ -11,6 +11,8 @@ public class Destructores {
 	private double y;
 	private double velocidad;
 	private int movimiento = 0;
+	Proyectil p;
+	public Proyectil proyectiles[] = new Proyectil[1];
 
 	public double getX() {
 		return x;
@@ -83,14 +85,20 @@ public class Destructores {
 		return new Rectangle((int) this.x, (int) this.y, 20, 20);
 	}
 
-	public Destructores fueraDePantalla(Destructores destructor) {
-		if (destructor.getX() > Entorno.WIDTH) {
-			destructor = null;
-		}
+	public void disparar() {
+		Proyectil p = new Proyectil((int) x, (int) y);
+		proyectiles[0] = p;
 
-		if (destructor.getX() < Entorno.WIDTH) {
-			destructor = null;
-		}
+	}
+
+	public Destructores fueraDePantalla(Destructores destructor) {
+		// if (destructor.getX() > Entorno.WIDTH) {
+		// destructor = null;
+		// }
+
+		// if (destructor.getX() < Entorno.WIDTH) {
+		// destructor = null;
+		// }
 
 		if (destructor.getY() > Entorno.HEIGHT) {
 			destructor = null;

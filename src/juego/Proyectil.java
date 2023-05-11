@@ -35,6 +35,10 @@ public class Proyectil {
 		y -= velocidad;
 	}
 
+	public void moverDestructores() {
+		y += velocidad;
+	}
+
 	public void dibujarProyectil(Entorno e) {
 		e.dibujarCirculo(x, y, 10, Color.GREEN);
 

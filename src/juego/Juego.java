@@ -118,8 +118,8 @@ public class Juego extends InterfaceJuego {
 						random.nextInt(300 - 50) + (50), 1);
 
 			} else {
-				destructoresArr[i].destruccion(destructoresArr, navecita.proyectiles, navecita);
 				destructor.fueraDePantalla(destructoresArr[i]);
+				destructoresArr[i].destruccion(destructoresArr, navecita.proyectiles, navecita);
 
 			}
 		}
@@ -145,6 +145,8 @@ public class Juego extends InterfaceJuego {
 	}
 
 	public void dibujarProyectiles(Entorno e) {
+		// disparos de navecita
+
 		if (navecita.proyectiles[0] != null) {
 			navecita.proyectiles[0].dibujarProyectil(e);
 			navecita.proyectiles[0].mover();
