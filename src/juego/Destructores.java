@@ -83,14 +83,20 @@ public class Destructores {
 		return new Rectangle((int) this.x, (int) this.y, 20, 20);
 	}
 
-	public void fueraDePantalla(int x, int y) {
-		if (this.getX() > x + 70) {
-			this.setX(x - 90);
+	public Destructores fueraDePantalla(Destructores destructor) {
+		if (destructor.getX() > Entorno.WIDTH) {
+			destructor = null;
 		}
 
-		if (this.getX() < x - 70) {
-			this.setX(this.getX() + 80);
+		if (destructor.getX() < Entorno.WIDTH) {
+			destructor = null;
 		}
+
+		if (destructor.getY() > Entorno.HEIGHT) {
+			destructor = null;
+		}
+
+		return destructor;
 	}
 
 	public boolean colision(Spaceship navecita, Destructores[] destructoresArr) {

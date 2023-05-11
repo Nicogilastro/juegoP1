@@ -9,15 +9,15 @@ import entorno.InterfaceJuego;
 public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
+
+	// Variables y métodos propios de cada grupo
+	// ...
 	Spaceship navecita;
 	Asteroides asteroide;
 	Asteroides[] asteroidesArr;
 	Destructores[] destructoresArr;
 	Destructores destructor;
 	Fondo fondo;
-
-	// Variables y métodos propios de cada grupo
-	// ...
 
 	Juego() {
 		// Inicializa el objeto entorno
@@ -67,10 +67,19 @@ public class Juego extends InterfaceJuego {
 		dibujarProyectiles(entorno);
 
 		// dibujo cada asteroide
+
+		Random random = new Random();
+		int rand = 0;
+		while (true) {
+			rand = random.nextInt(7 - 4) + 4;
+			if (rand != 0)
+				break;
+		}
+
 		for (int i = 0; i < asteroidesArr.length; i++) {
 			if (asteroidesArr[i] == null) {
-
-				continue;
+				asteroide = new Asteroides(random.nextInt(800), random.nextInt(200), 1, Math.PI / 4, 30);
+				asteroidesArr[i] = asteroide;
 			} else {
 				asteroidesArr[i].dibujarse(entorno);
 				asteroidesArr[i].mover(i % 2 == 0 ? 1 : -1);
@@ -103,24 +112,15 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 
-		// me fijo si los destructores se destruyeron
-
-		// genera un numero random de destructores
-		Random random = new Random();
-		int rand2 = 0;
-		while (true) {
-			rand2 = random.nextInt(7 - 4) + 4;
-			if (rand2 != 0)
-				break;
-		}
-
 		for (int i = 0; i < destructoresArr.length; i++) {
 			if (destructoresArr[i] == null) {
-				destructoresArr[i] = new Destructores(random.nextInt(800 - rand2 * 5) + (rand2 * 5),
-						random.nextInt(300 + rand2 * 3) - (rand2 * 3), 1);
+				destructoresArr[i] = new Destructores(random.nextInt(600 - 200) + (100),
+						random.nextInt(300 - 50) + (50), 1);
 
 			} else {
 				destructoresArr[i].destruccion(destructoresArr, navecita.proyectiles, navecita);
+				destructor.fueraDePantalla(destructoresArr[i]);
+
 			}
 		}
 
@@ -162,7 +162,7 @@ public class Juego extends InterfaceJuego {
 		Random random = new Random();
 		int rand2 = 0;
 		while (true) {
-			rand2 = random.nextInt(7 - 4) + 4;
+			rand2 = random.nextInt(6 - 4) + 4;
 			if (rand2 != 0)
 				break;
 		}
@@ -170,10 +170,8 @@ public class Juego extends InterfaceJuego {
 		destructoresArr = new Destructores[rand2];
 
 		for (int i = 0; i < rand2; i++) {
-			destructor = new Destructores(random.nextInt(Entorno.HEIGHT - rand2 * 5) + (rand2 * 5),
-					random.nextInt((int) (Entorno.HEIGHT * 0.33) + rand2 * 3) - (rand2 * 3), 1);
-			destructor.fueraDePantalla(random.nextInt(Entorno.HEIGHT - rand2 * 5) + (rand2 * 5),
-					random.nextInt((int) (Entorno.HEIGHT * 0.33) + rand2 * 3) - (rand2 * 3));
+			destructor = new Destructores(random.nextInt(600 - rand2 * 5) + (rand2 * 5),
+					random.nextInt(300 + rand2 * 3) - (rand2 * 3), 1);
 			destructoresArr[i] = destructor;
 
 		}
@@ -185,7 +183,7 @@ public class Juego extends InterfaceJuego {
 		Random random = new Random();
 		int rand = 0;
 		while (true) {
-			rand = random.nextInt(7 - 4) + 4;
+			rand = random.nextInt(6 - 4) + 4;
 			if (rand != 0)
 				break;
 		}

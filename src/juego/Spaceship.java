@@ -88,7 +88,6 @@ public class Spaceship {
 		if (this.x > 35) {
 			this.x -= this.velocidad * 2;
 		}
-
 	}
 
 	public int getVidas() {
