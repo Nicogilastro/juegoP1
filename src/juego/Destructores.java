@@ -60,13 +60,11 @@ public class Destructores {
 		}
 
 		if (movimiento < 50 && movimiento >= 0) {
-			disparoRayoDestructor();
 			x = x + mod;
 			movimiento += 1;
 		}
 
 		if (movimiento < 0 && movimiento >= -50) {
-			disparoRayoDestructor();
 			x = x - mod;
 			movimiento += 1;
 		}
@@ -165,14 +163,7 @@ public class Destructores {
 		}
 	}
 
-	public Proyectil rayoFueraDePantalla(Proyectil proyectil) {
-		if ((int) proyectil.getY() >= Entorno.HEIGHT) {
-			proyectil = null;
-		}
-		return proyectil;
-	}
-
-	public void disparoRayoDestructor() {
+	public void disparoRayoDestructor(Entorno entorno) {
 		Proyectil p = new Proyectil((int) x, (int) y);
 		proyectilesDestructores[0] = p;
 

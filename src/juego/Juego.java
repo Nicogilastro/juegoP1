@@ -72,8 +72,6 @@ public class Juego extends InterfaceJuego {
 
 		// disparo de los destructores
 
-		dibujarRayoDestructor(entorno);
-
 		// dibujo cada asteroide
 
 		Random random = new Random();
@@ -147,15 +145,6 @@ public class Juego extends InterfaceJuego {
 		// estado de la navecita vidas, proyectiles etc
 		if (navecita.getVidas() == 0) {
 			System.exit(0);
-		}
-
-	}
-
-	public void dibujarRayoDestructor(Entorno e) {
-		if (navecita.proyectiles[0] != null) {
-			destructor.proyectilesDestructores[0].dibujarRayoDestructor(e);
-			destructor.proyectilesDestructores[0].moverDestructores();
-			destructor.proyectilesDestructores[0] = destructor.rayoFueraDePantalla(destructor.proyectilesDestructores[0]);
 		}
 
 	}

@@ -47,7 +47,7 @@ public class Proyectil {
 
 	}
 
-	public void dibujarRayoDestructor(Entorno e) {
+	public void rayoDestructor(Entorno e) {
 		// e.dibujarCirculo(x, y, 10, Color.GREEN);
 		img = Herramientas.cargarImagen("rayo.png");
 		e.dibujarImagen(img, x, y, 0, 0.10);
