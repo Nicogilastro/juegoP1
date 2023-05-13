@@ -33,6 +33,7 @@ public class Juego extends InterfaceJuego {
 		generarDestructores();
 
 		fondo = new Fondo(entorno, this);
+
 		// Inicia el juego!
 		this.entorno.iniciar();
 
@@ -47,6 +48,9 @@ public class Juego extends InterfaceJuego {
 	public void tick() {
 		// Procesamiento de un instante de tiempo
 		// ...
+
+		// dibujo el fondo
+		fondo.dibujar(entorno);
 
 		// Comportamiento de las teclas
 
@@ -65,6 +69,10 @@ public class Juego extends InterfaceJuego {
 		// disparo de la nave
 
 		dibujarProyectiles(entorno);
+
+		// disparo de los destructores
+
+		dibujarRayoDestructor(entorno);
 
 		// dibujo cada asteroide
 
@@ -106,9 +114,9 @@ public class Juego extends InterfaceJuego {
 			} else {
 				if (i % 2 == 0)
 					destructoresArr[i].mover(1.5);
-				else
+				else {
 					destructoresArr[i].mover(1.5);
-
+				}
 			}
 		}
 
@@ -140,8 +148,16 @@ public class Juego extends InterfaceJuego {
 		if (navecita.getVidas() == 0) {
 			System.exit(0);
 		}
-		// dibujo el fondo
-		// fondo.dibujar(entorno);
+
+	}
+
+	public void dibujarRayoDestructor(Entorno e) {
+		if (navecita.proyectiles[0] != null) {
+			destructor.proyectilesDestructores[0].dibujarRayoDestructor(e);
+			destructor.proyectilesDestructores[0].moverDestructores();
+			destructor.proyectilesDestructores[0] = destructor.rayoFueraDePantalla(destructor.proyectilesDestructores[0]);
+		}
+
 	}
 
 	public void dibujarProyectiles(Entorno e) {
@@ -194,8 +210,13 @@ public class Juego extends InterfaceJuego {
 		asteroidesArr = new Asteroides[rand];
 
 		for (int i = 0; i < rand; i++) {
-			asteroide = new Asteroides(random.nextInt(800), random.nextInt(200), 1, Math.PI / 4, 30);
-			asteroidesArr[i] = asteroide;
+			if (asteroidesArr[i] == null) {
+				asteroide = new Asteroides(random.nextInt(800), random.nextInt(200), 1, Math.PI / 4, 30);
+				asteroidesArr[i] = asteroide;
+			} else {
+				continue;
+			}
+
 		}
 	}
 

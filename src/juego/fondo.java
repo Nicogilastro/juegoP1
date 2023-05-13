@@ -33,7 +33,7 @@ public class Fondo {
   public void dibujar(Entorno e) {
     fondo = Herramientas.cargarImagen("fondo.jpg");
 
-    e.dibujarImagen(fondo, 0, 0, 0, 1);
+    e.dibujarImagen(fondo, 0, 500, 0, 1);
 
   }
 }

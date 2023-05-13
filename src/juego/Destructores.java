@@ -12,7 +12,7 @@ public class Destructores {
 	private double velocidad;
 	private int movimiento = 0;
 	Proyectil p;
-	public Proyectil proyectiles[] = new Proyectil[1];
+	public Proyectil proyectilesDestructores[] = new Proyectil[1];
 
 	public double getX() {
 		return x;
@@ -60,11 +60,13 @@ public class Destructores {
 		}
 
 		if (movimiento < 50 && movimiento >= 0) {
+			disparoRayoDestructor();
 			x = x + mod;
 			movimiento += 1;
 		}
 
 		if (movimiento < 0 && movimiento >= -50) {
+			disparoRayoDestructor();
 			x = x - mod;
 			movimiento += 1;
 		}
@@ -83,12 +85,6 @@ public class Destructores {
 
 	public Rectangle destructoresHitbox() {
 		return new Rectangle((int) this.x, (int) this.y, 20, 20);
-	}
-
-	public void disparar() {
-		Proyectil p = new Proyectil((int) x, (int) y);
-		proyectiles[0] = p;
-
 	}
 
 	public Destructores fueraDePantalla(Destructores destructor) {
@@ -168,4 +164,18 @@ public class Destructores {
 			}
 		}
 	}
+
+	public Proyectil rayoFueraDePantalla(Proyectil proyectil) {
+		if ((int) proyectil.getY() >= Entorno.HEIGHT) {
+			proyectil = null;
+		}
+		return proyectil;
+	}
+
+	public void disparoRayoDestructor() {
+		Proyectil p = new Proyectil((int) x, (int) y);
+		proyectilesDestructores[0] = p;
+
+	}
+
 }

@@ -3,6 +3,7 @@ package juego;
 import java.awt.*;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Proyectil {
 	private int x;
@@ -40,7 +41,16 @@ public class Proyectil {
 	}
 
 	public void dibujarProyectil(Entorno e) {
-		e.dibujarCirculo(x, y, 10, Color.GREEN);
+		// e.dibujarCirculo(x, y, 10, Color.GREEN);
+		img = Herramientas.cargarImagen("proyectil.png");
+		e.dibujarImagen(img, x, y, 0, 0.10);
+
+	}
+
+	public void dibujarRayoDestructor(Entorno e) {
+		// e.dibujarCirculo(x, y, 10, Color.GREEN);
+		img = Herramientas.cargarImagen("rayo.png");
+		e.dibujarImagen(img, x, y, 0, 0.10);
 
 	}
 
