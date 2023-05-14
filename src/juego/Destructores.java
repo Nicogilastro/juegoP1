@@ -11,8 +11,8 @@ public class Destructores {
 	private double y;
 	private double velocidad;
 	private int movimiento = 0;
-	Proyectil p;
-	public Proyectil proyectilesDestructores[] = new Proyectil[1];
+	Iones p;
+	public Iones ionesArr[] = new Iones[6];
 
 	public double getX() {
 		return x;
@@ -57,11 +57,17 @@ public class Destructores {
 	public void mover(double mod) {
 		if (movimiento == 50) {
 			movimiento = -50;
+			this.disparo();
+		}
+
+		if (movimiento == 0) {
+			this.disparo();
 		}
 
 		if (movimiento < 50 && movimiento >= 0) {
 			x = x + mod;
 			movimiento += 1;
+
 		}
 
 		if (movimiento < 0 && movimiento >= -50) {
@@ -82,9 +88,10 @@ public class Destructores {
 	}
 
 	public Rectangle destructoresHitbox() {
-		return new Rectangle((int) this.x, (int) this.y, 20, 20);
+		return new Rectangle((int) this.x, (int) this.y, 20, 30);
 	}
 
+	// arreglar
 	public Destructores fueraDePantalla(Destructores destructor) {
 		// if (destructor.getX() > Entorno.WIDTH) {
 		// destructor = null;
@@ -163,10 +170,20 @@ public class Destructores {
 		}
 	}
 
-	public void disparoRayoDestructor(Entorno entorno) {
-		Proyectil p = new Proyectil((int) x, (int) y);
-		proyectilesDestructores[0] = p;
-
+	public Iones disparo() {
+		Iones ionNew = new Iones((int) this.x, (int) this.y);
+		for (int i = 0; i < ionesArr.length; i++) {
+			if (ionesArr[i] == null) {
+				ionesArr[i] = ionNew;
+			}
+		}
+		return ionNew;
 	}
 
+	public Iones fueraDePantalla(Iones Iones) {
+		if ((int) Iones.getY() >= 1600) {
+			Iones = null;
+		}
+		return Iones;
+	}
 }

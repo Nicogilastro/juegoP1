@@ -47,10 +47,6 @@ public class Asteroides {
 		this.setRadio(radio);
 	}
 
-	public Rectangle astHitBox() {
-		return new Rectangle((int) this.x, (int) this.y, 20, 20);
-	}
-
 	public void mover(int mod) {
 		y += velocidad * Math.sin(angulo);
 		x += velocidad * Math.cos(angulo) * mod;
@@ -78,7 +74,7 @@ public class Asteroides {
 	}
 
 	public Rectangle asteroideHitbox() {
-		return new Rectangle((int) this.x, (int) this.y, 20, 20);
+		return new Rectangle((int) this.x, (int) this.y, 54, 54);
 	}
 
 	public boolean colision(Spaceship navecita, Asteroides[] asteroidesArr) {
@@ -93,6 +89,7 @@ public class Asteroides {
 				}
 			}
 		}
+
 		return false;
 	}
 

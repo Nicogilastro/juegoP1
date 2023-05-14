@@ -7,7 +7,7 @@ import entorno.Herramientas;
 
 public class Proyectil {
 	private int x;
-	int y;
+	private int y;
 	private double velocidad = 5;
 	Image img;
 
@@ -36,26 +36,14 @@ public class Proyectil {
 		y -= velocidad;
 	}
 
-	public void moverDestructores() {
-		y += velocidad;
-	}
-
 	public void dibujarProyectil(Entorno e) {
-		// e.dibujarCirculo(x, y, 10, Color.GREEN);
 		img = Herramientas.cargarImagen("proyectil.png");
 		e.dibujarImagen(img, x, y, 0, 0.10);
 
 	}
 
-	public void rayoDestructor(Entorno e) {
-		// e.dibujarCirculo(x, y, 10, Color.GREEN);
-		img = Herramientas.cargarImagen("rayo.png");
-		e.dibujarImagen(img, x, y, 0, 0.10);
-
-	}
-
 	public Rectangle proyectilHitbox() {
-		return new Rectangle(x, y, 20, 20);
+		return new Rectangle(x, y, 10, 10);
 	}
 
 }

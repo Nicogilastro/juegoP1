@@ -27,7 +27,7 @@ public class Spaceship {
 	}
 
 	public void dibujarse(Entorno entorno) {
-		entorno.dibujarImagen(img1, this.x, this.y, 0, 1.25);
+		entorno.dibujarImagen(img1, this.x, this.y, 0, 2);
 
 	}
 
@@ -36,13 +36,29 @@ public class Spaceship {
 	}
 
 	// getters y setters
-	public double getX() {
-		return x;
-	}
+	// public double getX() {
+	// return x;
+	// }
 
-	public void setX(double x) {
-		this.x = x;
-	}
+	// public void setX(double x) {
+	// this.x = x;
+	// }
+
+	// public double getY() {
+	// return y;
+	// }
+
+	// public void setY(double y) {
+	// this.y = y;
+	// }
+
+	// public double getVelocidad() {
+	// return velocidad;
+	// }
+
+	// public void setVelocidad(double velocidad) {
+	// this.velocidad = velocidad;
+	// }
 
 	public int getPuntaje() {
 		return puntaje;
@@ -50,22 +66,6 @@ public class Spaceship {
 
 	public void setPuntaje(int puntaje) {
 		this.puntaje = puntaje;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public double getVelocidad() {
-		return velocidad;
-	}
-
-	public void setVelocidad(double velocidad) {
-		this.velocidad = velocidad;
 	}
 
 	public boolean puedeDisparar() {
@@ -90,6 +90,8 @@ public class Spaceship {
 		}
 	}
 
+	// vidas
+
 	public int getVidas() {
 		return vidas;
 	}
@@ -98,11 +100,15 @@ public class Spaceship {
 		this.vidas = vidas;
 	}
 
+	// hitbox
+
 	public Rectangle navecitaHitbox() {
-		return new Rectangle((int) this.x, (int) this.y - 70, 60, 100);
+		return new Rectangle((int) this.x, (int) this.y - 70, 62, 94);
 	}
 
-	public void disparar(Entorno entorno) {
+	// disparo
+
+	public void disparar() {
 		if (puedeDisparar) {
 			Proyectil p = new Proyectil((int) x, (int) y);
 			proyectiles[0] = p;
@@ -115,6 +121,27 @@ public class Spaceship {
 			proyectil = null;
 		}
 		return proyectil;
+	}
+
+	public boolean colisionConIon(Spaceship navecita, Destructores[] destructoresArr) {
+		boolean bandera = false;
+		for (int i = 0; i < destructoresArr.length; i++) {
+			if (destructoresArr[i] != null) {
+				for (int j = 0; j < destructoresArr[i].ionesArr.length; j++) {
+					if (destructoresArr[i].ionesArr[j] != null) {
+						if (navecita.navecitaHitbox().intersects(destructoresArr[i].ionesArr[j].ionHitbox())) {
+							destructoresArr[i].ionesArr[j] = null;
+							bandera = true;
+						}
+					} else if (destructoresArr[i] == null) {
+						continue;
+					}
+				}
+			} else {
+				continue;
+			}
+		}
+		return bandera;
 	}
 
 }

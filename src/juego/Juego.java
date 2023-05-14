@@ -18,6 +18,8 @@ public class Juego extends InterfaceJuego {
 	Destructores[] destructoresArr;
 	Destructores destructor;
 	Fondo fondo;
+	int tiempoDest = 0;
+	int tiempoAst = 0;
 
 	Juego() {
 		// Inicializa el objeto entorno
@@ -49,13 +51,19 @@ public class Juego extends InterfaceJuego {
 		// Procesamiento de un instante de tiempo
 		// ...
 
+		tiempoDest++;
+		// System.out.println(tiempoDest);
+		tiempoAst++;
+
 		// dibujo el fondo
 		fondo.dibujar(entorno);
 
 		// Comportamiento de las teclas
 
-		if (entorno.estaPresionada(entorno.TECLA_ESPACIO))
-			navecita.disparar(entorno);
+		if (entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
+			navecita.disparar();
+
+		}
 
 		if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada('d'))
 			navecita.moverDerecha(entorno);
@@ -72,6 +80,19 @@ public class Juego extends InterfaceJuego {
 
 		// disparo de los destructores
 
+		dibujarIones(entorno);
+
+		// disparos destructores
+
+		Random random3 = new Random();
+		int probDisparo = random3.nextInt(100 - 1) + 1;
+		if (tiempoDest / 100 == 2 % 1)
+			destructoresDisparos(probDisparo);
+		if (tiempoDest == 800) {
+			for (int i = 0; i < destructor.ionesArr.length; i++) {
+				destructor.ionesArr[i] = null;
+			}
+		}
 		// dibujo cada asteroide
 
 		Random random = new Random();
@@ -110,9 +131,9 @@ public class Juego extends InterfaceJuego {
 			if (destructoresArr[i] == null) {
 				continue;
 			} else {
-				if (i % 2 == 0)
+				if (i % 2 == 0) {
 					destructoresArr[i].mover(1.5);
-				else {
+				} else {
 					destructoresArr[i].mover(1.5);
 				}
 			}
@@ -138,13 +159,32 @@ public class Juego extends InterfaceJuego {
 		entorno.cambiarFont("Arial", 18, Color.white);
 		entorno.escribirTexto("Puntos: " + navecita.getPuntaje(), 50, 70);
 
+		// colisiones
+
 		asteroide.colision(navecita, asteroidesArr);
+		if (navecita.colisionConIon(navecita, destructoresArr)) {
+			int navecitaVidas = navecita.getVidas();
+			navecitaVidas -= 1;
+			navecita.setVidas(navecitaVidas);
+		}
 		destructor.colision(navecita, destructoresArr);
 		destructor.superponen(destructoresArr, asteroidesArr);
 
 		// estado de la navecita vidas, proyectiles etc
+		System.out.println(navecita.getVidas());
 		if (navecita.getVidas() == 0) {
+			navecita = null;
 			System.exit(0);
+		}
+
+		if (tiempoDest > 1000) {
+			generarDestructores();
+			tiempoDest = 0;
+		}
+
+		if (tiempoAst > 600) {
+			generarAsteroides();
+			tiempoAst = 0;
 		}
 
 	}
@@ -162,6 +202,72 @@ public class Juego extends InterfaceJuego {
 
 		}
 
+	}
+
+	public void dibujarIones(Entorno e) {
+		Random random = new Random();
+		int rand = 0;
+		while (true) {
+			rand = random.nextInt(destructor.ionesArr.length);
+			if (rand != 0)
+				break;
+		}
+
+		for (Destructores destructor : destructoresArr) {
+			if (destructor != null) {
+				if (destructor.ionesArr[rand] != null) {
+					destructor.ionesArr[rand].dibujarIones(e);
+					destructor.ionesArr[rand].mover();
+					destructor.ionesArr[rand] = destructor.fueraDePantalla(destructor.ionesArr[rand]);
+				}
+			} else {
+				continue;
+			}
+		}
+
+		// for (Destructores destructor : destructoresArr) {
+		// if (destructor == null) {
+		// continue;
+		// }
+		// for (Iones ion : destructor.ionesArr) {
+		// if (ion != null) {
+		// ion.dibujarIones(e);
+		// ion.mover();
+		// ion = destructor.fueraDePantalla(ion);
+		// } else {
+		// continue;
+		// }
+		// }
+		// }
+
+	}
+
+	public void destructoresDisparos(int probDisparo) {
+		if (navecita.getVidas() != 0) {
+			if (probDisparo == 10) {
+				for (int i = 0; i < destructoresArr.length; i++) {
+					if (destructoresArr == null) {
+						continue;
+					} else {
+						Random random = new Random();
+						int rand = 0;
+						while (true) {
+							rand = random.nextInt(destructoresArr.length - 1);
+							if (rand != 0)
+								break;
+						}
+
+						if (destructoresArr[rand] != null) {
+							destructoresArr[rand].disparo();
+							// System.out.println("hola");
+							break;
+						} else {
+							continue;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void generarDestructores() {
@@ -212,5 +318,6 @@ public class Juego extends InterfaceJuego {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Juego juego = new Juego();
+
 	}
 }
