@@ -23,7 +23,7 @@ public class Juego extends InterfaceJuego {
 
 	Juego() {
 		// Inicializa el objeto entorno
-		this.entorno = new Entorno(this, "Lost Galaxian - Grupo 3 - v1", 600, 1600);
+		this.entorno = new Entorno(this, "Lost Galaxian - Grupo 3 - v1", 600, 1000);
 
 		// Inicializar lo que haga falta para el juego
 		// ...
@@ -80,7 +80,7 @@ public class Juego extends InterfaceJuego {
 
 		// disparo de los destructores
 
-		dibujarIones(entorno);
+		dibujarIones(entorno, destructor);
 
 		// disparos destructores
 
@@ -139,13 +139,14 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 
+		// regenero los destructores que se destruyen
+
 		for (int i = 0; i < destructoresArr.length; i++) {
 			if (destructoresArr[i] == null) {
-				destructoresArr[i] = new Destructores(random.nextInt(600 - 200) + (100),
-						random.nextInt(300 - 50) + (50), 1);
+				destructoresArr[i] = new Destructores(random.nextInt(550) + 100,
+						random.nextInt(200 - 50) + (50), 1);
 
 			} else {
-				destructor.fueraDePantalla(destructoresArr[i]);
 				destructoresArr[i].destruccion(destructoresArr, navecita.proyectiles, navecita);
 
 			}
@@ -154,30 +155,40 @@ public class Juego extends InterfaceJuego {
 		// dibujo lost textos
 		// vidas
 		entorno.cambiarFont("Arial", 18, Color.white);
-		entorno.escribirTexto("Vidas: " + navecita.getVidas(), 50, 50);
+		entorno.escribirTexto("Vidas: " + navecita.getVidas(), 25, 50);
 
-		entorno.cambiarFont("Arial", 18, Color.white);
-		entorno.escribirTexto("Puntos: " + navecita.getPuntaje(), 50, 70);
+		entorno.cambiarFont("Arial", 18, Color.RED);
+		entorno.escribirTexto("Enemigos Eliminados: " + navecita.getPuntaje(), 25, 975);
 
 		// colisiones
 
 		asteroide.colision(navecita, asteroidesArr);
+
 		if (navecita.colisionConIon(navecita, destructoresArr)) {
 			int navecitaVidas = navecita.getVidas();
 			navecitaVidas -= 1;
 			navecita.setVidas(navecitaVidas);
 		}
-		destructor.colision(navecita, destructoresArr);
-		destructor.superponen(destructoresArr, asteroidesArr);
+		// colision destructor con navecita
 
-		// estado de la navecita vidas, proyectiles etc
-		System.out.println(navecita.getVidas());
+		destructor.colision(navecita, destructoresArr);
+
+		// colision destructor con asteroide
+
+		destructor.superponenAst(destructoresArr, asteroidesArr);
+
+		// colision destructor con destructor
+
+		destructor.superponenDest(destructoresArr);
+
+		// estado de las vidas de la navecita, tiempos de respawn de asteroides y
+		// destructores
+		// System.out.println(navecita.getVidas());
 		if (navecita.getVidas() == 0) {
-			navecita = null;
 			System.exit(0);
 		}
 
-		if (tiempoDest > 1000) {
+		if (tiempoDest > 1200) {
 			generarDestructores();
 			tiempoDest = 0;
 		}
@@ -204,7 +215,7 @@ public class Juego extends InterfaceJuego {
 
 	}
 
-	public void dibujarIones(Entorno e) {
+	public void dibujarIones(Entorno e, Destructores destructores) {
 		Random random = new Random();
 		int rand = 0;
 		while (true) {
@@ -224,22 +235,6 @@ public class Juego extends InterfaceJuego {
 				continue;
 			}
 		}
-
-		// for (Destructores destructor : destructoresArr) {
-		// if (destructor == null) {
-		// continue;
-		// }
-		// for (Iones ion : destructor.ionesArr) {
-		// if (ion != null) {
-		// ion.dibujarIones(e);
-		// ion.mover();
-		// ion = destructor.fueraDePantalla(ion);
-		// } else {
-		// continue;
-		// }
-		// }
-		// }
-
 	}
 
 	public void destructoresDisparos(int probDisparo) {
@@ -259,7 +254,6 @@ public class Juego extends InterfaceJuego {
 
 						if (destructoresArr[rand] != null) {
 							destructoresArr[rand].disparo();
-							// System.out.println("hola");
 							break;
 						} else {
 							continue;
@@ -283,8 +277,8 @@ public class Juego extends InterfaceJuego {
 		destructoresArr = new Destructores[rand2];
 
 		for (int i = 0; i < rand2; i++) {
-			destructor = new Destructores(random.nextInt(600 - rand2 * 5) + (rand2 * 5),
-					random.nextInt(300 + rand2 * 3) - (rand2 * 3), 1);
+			destructor = new Destructores((random.nextInt(400)) + 100,
+					random.nextInt(200), 1);
 			destructoresArr[i] = destructor;
 
 		}

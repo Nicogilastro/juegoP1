@@ -11,8 +11,9 @@ public class Destructores {
 	private double y;
 	private double velocidad;
 	private int movimiento = 0;
-	Iones p;
+	Iones ion;
 	public Iones ionesArr[] = new Iones[6];
+	Image imagenDest = Herramientas.cargarImagen("destructor.png");
 
 	public double getX() {
 		return x;
@@ -45,8 +46,6 @@ public class Destructores {
 	public void setMovimiento(int movimiento) {
 		this.movimiento = movimiento;
 	}
-
-	Image imagenDest = Herramientas.cargarImagen("destructor.png");
 
 	public Destructores(double x, double y, double velocidad) {
 		this.x = x;
@@ -88,24 +87,7 @@ public class Destructores {
 	}
 
 	public Rectangle destructoresHitbox() {
-		return new Rectangle((int) this.x, (int) this.y, 20, 30);
-	}
-
-	// arreglar
-	public Destructores fueraDePantalla(Destructores destructor) {
-		// if (destructor.getX() > Entorno.WIDTH) {
-		// destructor = null;
-		// }
-
-		// if (destructor.getX() < Entorno.WIDTH) {
-		// destructor = null;
-		// }
-
-		if (destructor.getY() > Entorno.HEIGHT) {
-			destructor = null;
-		}
-
-		return destructor;
+		return new Rectangle((int) this.x, (int) this.y, 40, 60);
 	}
 
 	public boolean colision(Spaceship navecita, Destructores[] destructoresArr) {
@@ -123,7 +105,7 @@ public class Destructores {
 		return false;
 	}
 
-	public void superponen(Destructores[] destructoresArr, Asteroides[] asteroidesArr) {
+	public void superponenAst(Destructores[] destructoresArr, Asteroides[] asteroidesArr) {
 		for (int i = 0; i < destructoresArr.length; i++) {
 			for (int j = 0; j < asteroidesArr.length; j++) {
 				if (destructoresArr[i] == null || asteroidesArr[j] == null) {
@@ -135,17 +117,21 @@ public class Destructores {
 				}
 
 			}
+
 		}
+	}
+
+	public void superponenDest(Destructores[] destructoresArr) {
 		for (int i = 0; i < destructoresArr.length; i++) {
-			if (destructoresArr[i] == null) {
-				continue;
-			} else {
-				try {
-					if (destructoresArr[i].destructoresHitbox().intersects(destructoresArr[i + 1].destructoresHitbox())) {
-						destructoresArr[i + 1].setY(destructoresArr[i + 1].getY() - 30);
+			for (int j = 1; j < destructoresArr.length; j++) {
+				if (destructoresArr[i] != null && destructoresArr[j] != null && destructoresArr[i] != destructoresArr[j]) {
+					if (j >= destructoresArr.length) {
+						j = 0;
 					}
-				} catch (Exception e) {
-					continue;
+					if (destructoresArr[i].destructoresHitbox().intersects(destructoresArr[j].destructoresHitbox())) {
+						destructoresArr[j].setX(destructoresArr[i].getX() - 70);
+
+					}
 				}
 			}
 		}
@@ -171,13 +157,13 @@ public class Destructores {
 	}
 
 	public Iones disparo() {
-		Iones ionNew = new Iones((int) this.x, (int) this.y);
+		ion = new Iones((int) this.x, (int) this.y);
 		for (int i = 0; i < ionesArr.length; i++) {
 			if (ionesArr[i] == null) {
-				ionesArr[i] = ionNew;
+				ionesArr[i] = ion;
 			}
 		}
-		return ionNew;
+		return ion;
 	}
 
 	public Iones fueraDePantalla(Iones Iones) {

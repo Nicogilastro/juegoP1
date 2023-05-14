@@ -103,14 +103,14 @@ public class Spaceship {
 	// hitbox
 
 	public Rectangle navecitaHitbox() {
-		return new Rectangle((int) this.x, (int) this.y - 70, 62, 94);
+		return new Rectangle((int) this.x, (int) this.y, 32, 64);
 	}
 
 	// disparo
 
 	public void disparar() {
 		if (puedeDisparar) {
-			Proyectil p = new Proyectil((int) x, (int) y);
+			p = new Proyectil((int) x, (int) y);
 			proyectiles[0] = p;
 		}
 		puedeDisparar = false;
