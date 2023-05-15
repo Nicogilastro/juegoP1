@@ -48,4 +48,10 @@ public class Iones {
 
   }
 
+  public Iones fueraDePantalla(Iones Iones) {
+    if ((int) Iones.getY() >= 1600) {
+      Iones = null;
+    }
+    return Iones;
+  }
 }

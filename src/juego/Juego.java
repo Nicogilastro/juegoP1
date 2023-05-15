@@ -13,26 +13,30 @@ public class Juego extends InterfaceJuego {
 	// Variables y métodos propios de cada grupo
 	// ...
 	Spaceship navecita;
-	Asteroides asteroide;
 	Asteroides[] asteroidesArr;
+	Asteroides asteroide;
 	Destructores[] destructoresArr;
 	Destructores destructor;
+	Iones[] ionesArr;
+	Iones ion;
 	Fondo fondo;
 	int tiempoDest = 0;
 	int tiempoAst = 0;
+	int tiempoDestDisparo = 0;
 
 	Juego() {
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo 3 - v1", 600, 1000);
 
 		// Inicializar lo que haga falta para el juego
-		// ...
 
 		navecita = new Spaceship(entorno.ancho() / 2, entorno.alto() - 100, 3, 2);
 
 		generarAsteroides();
 
 		generarDestructores();
+
+		generarIones(destructoresArr);
 
 		fondo = new Fondo(entorno, this);
 
@@ -43,7 +47,7 @@ public class Juego extends InterfaceJuego {
 
 	/**
 	 * Durante el juego, el método tick() será ejecutado en cada instante y
-	 * por lo tanto es el método más importante de esta clase. Aquí se debe
+	 * por lo tanto es el método más importante de esta clasentorno. Aquí se debe
 	 * actualizar el estado interno del juego para simular el paso del tiempo
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
@@ -52,18 +56,18 @@ public class Juego extends InterfaceJuego {
 		// ...
 
 		tiempoDest++;
-		// System.out.println(tiempoDest);
+
 		tiempoAst++;
+
+		tiempoDestDisparo++;
 
 		// dibujo el fondo
 		fondo.dibujar(entorno);
 
 		// Comportamiento de las teclas
 
-		if (entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
+		if (entorno.estaPresionada(entorno.TECLA_ESPACIO))
 			navecita.disparar();
-
-		}
 
 		if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada('d'))
 			navecita.moverDerecha(entorno);
@@ -80,19 +84,8 @@ public class Juego extends InterfaceJuego {
 
 		// disparo de los destructores
 
-		dibujarIones(entorno, destructor);
+		dibujarIones(entorno);
 
-		// disparos destructores
-
-		Random random3 = new Random();
-		int probDisparo = random3.nextInt(100 - 1) + 1;
-		if (tiempoDest / 100 == 2 % 1)
-			destructoresDisparos(probDisparo);
-		if (tiempoDest == 800) {
-			for (int i = 0; i < destructor.ionesArr.length; i++) {
-				destructor.ionesArr[i] = null;
-			}
-		}
 		// dibujo cada asteroide
 
 		Random random = new Random();
@@ -121,16 +114,13 @@ public class Juego extends InterfaceJuego {
 				continue;
 			} else {
 				destructoresArr[i].dibujarse(entorno);
-
 			}
 		}
 
 		// muevo los destructores de izq a der
 
 		for (int i = 0; i < destructoresArr.length; i++) {
-			if (destructoresArr[i] == null) {
-				continue;
-			} else {
+			if (destructoresArr[i] != null) {
 				if (i % 2 == 0) {
 					destructoresArr[i].mover(1.5);
 				} else {
@@ -138,6 +128,13 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
+
+		// disparos destructores
+
+		Random random3 = new Random();
+		int probDisparo = random3.nextInt(100 - 1) + 1;
+		if (tiempoDest / 100 == 2 % 1)
+			destructoresDisparos(probDisparo);
 
 		// regenero los destructores que se destruyen
 
@@ -152,23 +149,41 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 
-		// dibujo lost textos
+		// regenero los iones que impactan o estan fuera de pantalla
+
+		for (int i = 0; i < ionesArr.length; i++) {
+			if (ionesArr[i] == null) {
+				ionesArr[i] = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
+
+			} else {
+				ionesArr[i].fueraDePantalla(ionesArr[i]);
+
+			}
+		}
+
+		// dibujo los textos
+
 		// vidas
 		entorno.cambiarFont("Arial", 18, Color.white);
 		entorno.escribirTexto("Vidas: " + navecita.getVidas(), 25, 50);
 
-		entorno.cambiarFont("Arial", 18, Color.RED);
+		// enemigos eliminados
+
+		entorno.cambiarFont("Arial", 20, Color.RED);
 		entorno.escribirTexto("Enemigos Eliminados: " + navecita.getPuntaje(), 25, 975);
 
 		// colisiones
 
 		asteroide.colision(navecita, asteroidesArr);
 
-		if (navecita.colisionConIon(navecita, destructoresArr)) {
-			int navecitaVidas = navecita.getVidas();
-			navecitaVidas -= 1;
-			navecita.setVidas(navecitaVidas);
+		if (ionesArr != null) {
+			if (navecita.colisionConIon(navecita, ionesArr)) {
+				int navecitaVidas = navecita.getVidas();
+				navecitaVidas -= 1;
+				navecita.setVidas(navecitaVidas);
+			}
 		}
+
 		// colision destructor con navecita
 
 		destructor.colision(navecita, destructoresArr);
@@ -183,7 +198,6 @@ public class Juego extends InterfaceJuego {
 
 		// estado de las vidas de la navecita, tiempos de respawn de asteroides y
 		// destructores
-		// System.out.println(navecita.getVidas());
 		if (navecita.getVidas() == 0) {
 			System.exit(0);
 		}
@@ -198,6 +212,21 @@ public class Juego extends InterfaceJuego {
 			tiempoAst = 0;
 		}
 
+		// me fijo si el jugador gano
+
+		if (navecita.getPuntaje() == 15) {
+			entorno.cambiarFont("Microsoft Yahei", 40, Color.red);
+			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
+
+			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
+			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
+
+		}
+
+	}
+
+	public void escribirTextoPantalla(String text, int x, int y, Entorno e) {
+		entorno.escribirTexto(text, x, y);
 	}
 
 	public void dibujarProyectiles(Entorno e) {
@@ -215,24 +244,15 @@ public class Juego extends InterfaceJuego {
 
 	}
 
-	public void dibujarIones(Entorno e, Destructores destructores) {
-		Random random = new Random();
-		int rand = 0;
-		while (true) {
-			rand = random.nextInt(destructor.ionesArr.length);
-			if (rand != 0)
-				break;
-		}
+	public void dibujarIones(Entorno e) {
+		if (ionesArr != null) {
+			for (int i = 0; i < ionesArr.length; i++) {
+				if (ionesArr[i] != null) {
+					ionesArr[i].dibujarIones(e);
+					ionesArr[i].mover();
+					ionesArr[i] = ionesArr[i].fueraDePantalla(ionesArr[i]);
 
-		for (Destructores destructor : destructoresArr) {
-			if (destructor != null) {
-				if (destructor.ionesArr[rand] != null) {
-					destructor.ionesArr[rand].dibujarIones(e);
-					destructor.ionesArr[rand].mover();
-					destructor.ionesArr[rand] = destructor.fueraDePantalla(destructor.ionesArr[rand]);
 				}
-			} else {
-				continue;
 			}
 		}
 	}
@@ -240,29 +260,28 @@ public class Juego extends InterfaceJuego {
 	public void destructoresDisparos(int probDisparo) {
 		if (navecita.getVidas() != 0) {
 			if (probDisparo == 10) {
-				for (int i = 0; i < destructoresArr.length; i++) {
-					if (destructoresArr == null) {
-						continue;
-					} else {
-						Random random = new Random();
-						int rand = 0;
-						while (true) {
-							rand = random.nextInt(destructoresArr.length - 1);
-							if (rand != 0)
-								break;
-						}
+				Random random = new Random();
+				int rand = 0;
+				while (true) {
+					rand = random.nextInt(destructoresArr.length - 1);
+					if (rand != 0)
+						break;
+				}
 
-						if (destructoresArr[rand] != null) {
-							destructoresArr[rand].disparo();
-							break;
-						} else {
-							continue;
-						}
+				for (int j = 0; j < ionesArr.length; j++) {
+					if (destructoresArr[rand] != null && ionesArr[j] != null) {
+						destructoresArr[rand].disparo(destructoresArr[rand], ionesArr[rand]);
+						break;
+					} else {
+						continue;
 					}
 				}
+
 			}
 		}
 	}
+
+	// genero destructores
 
 	public void generarDestructores() {
 		// genera un numero random de destructores
@@ -283,6 +302,8 @@ public class Juego extends InterfaceJuego {
 
 		}
 	}
+
+	// genero asteroides
 
 	public void generarAsteroides() {
 		// genera un numero random de asteroides
@@ -306,6 +327,25 @@ public class Juego extends InterfaceJuego {
 				continue;
 			}
 
+		}
+	}
+
+	// genero iones
+
+	public void generarIones(Destructores[] destructoresArr) {
+		// array de iones
+		ionesArr = new Iones[destructoresArr.length];
+
+		for (int i = 0; i < destructoresArr.length; i++) {
+			if (destructoresArr[i] != null) {
+				Iones ion = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
+				ionesArr[i] = ion;
+			}
+
+			if (ionesArr[i] == null) {
+				Iones ion = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
+				ionesArr[i] = ion;
+			}
 		}
 	}
 

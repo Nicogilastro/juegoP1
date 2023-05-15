@@ -123,21 +123,16 @@ public class Spaceship {
 		return proyectil;
 	}
 
-	public boolean colisionConIon(Spaceship navecita, Destructores[] destructoresArr) {
+	public boolean colisionConIon(Spaceship navecita, Iones[] ionesArr) {
 		boolean bandera = false;
-		for (int i = 0; i < destructoresArr.length; i++) {
-			if (destructoresArr[i] != null) {
-				for (int j = 0; j < destructoresArr[i].ionesArr.length; j++) {
-					if (destructoresArr[i].ionesArr[j] != null) {
-						if (navecita.navecitaHitbox().intersects(destructoresArr[i].ionesArr[j].ionHitbox())) {
-							destructoresArr[i].ionesArr[j] = null;
-							bandera = true;
-						}
-					} else if (destructoresArr[i] == null) {
-						continue;
-					}
+
+		for (int i = 0; i < ionesArr.length; i++) {
+			if (ionesArr[i] != null) {
+				if (navecita.navecitaHitbox().intersects(ionesArr[i].ionHitbox())) {
+					ionesArr[i] = null;
+					bandera = true;
 				}
-			} else {
+			} else if (ionesArr[i] == null) {
 				continue;
 			}
 		}

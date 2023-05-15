@@ -47,6 +47,14 @@ public class Asteroides {
 		this.setRadio(radio);
 	}
 
+	public int getRadio() {
+		return radio;
+	}
+
+	public void setRadio(int radio) {
+		this.radio = radio;
+	}
+
 	public void mover(int mod) {
 		y += velocidad * Math.sin(angulo);
 		x += velocidad * Math.cos(angulo) * mod;
@@ -63,14 +71,6 @@ public class Asteroides {
 	public void dibujarse(Entorno entorno) {
 		entorno.dibujarImagen(imagenAst, this.x, this.y, -1.55, 0.05);
 
-	}
-
-	public int getRadio() {
-		return radio;
-	}
-
-	public void setRadio(int radio) {
-		this.radio = radio;
 	}
 
 	public Rectangle asteroideHitbox() {
@@ -91,15 +91,6 @@ public class Asteroides {
 		}
 
 		return false;
-	}
-
-	public Asteroides fueraDePantalla(Asteroides asteroide) {
-		if (asteroide.getX() > Entorno.WIDTH || asteroide.getX() < Entorno.WIDTH || asteroide.getY() > Entorno.WIDTH
-				|| asteroide.getY() < Entorno.WIDTH) {
-			asteroide = null;
-		}
-
-		return asteroide;
 	}
 
 }

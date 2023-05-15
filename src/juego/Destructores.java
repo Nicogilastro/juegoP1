@@ -11,8 +11,6 @@ public class Destructores {
 	private double y;
 	private double velocidad;
 	private int movimiento = 0;
-	Iones ion;
-	public Iones ionesArr[] = new Iones[6];
 	Image imagenDest = Herramientas.cargarImagen("destructor.png");
 
 	public double getX() {
@@ -56,11 +54,6 @@ public class Destructores {
 	public void mover(double mod) {
 		if (movimiento == 50) {
 			movimiento = -50;
-			this.disparo();
-		}
-
-		if (movimiento == 0) {
-			this.disparo();
 		}
 
 		if (movimiento < 50 && movimiento >= 0) {
@@ -156,20 +149,11 @@ public class Destructores {
 		}
 	}
 
-	public Iones disparo() {
-		ion = new Iones((int) this.x, (int) this.y);
-		for (int i = 0; i < ionesArr.length; i++) {
-			if (ionesArr[i] == null) {
-				ionesArr[i] = ion;
-			}
+	public void disparo(Destructores destructor, Iones ion) {
+		if (destructor != null && ion != null) {
+			ion.setX((int) destructor.getX());
+			ion.setY((int) destructor.getY());
 		}
-		return ion;
 	}
 
-	public Iones fueraDePantalla(Iones Iones) {
-		if ((int) Iones.getY() >= 1600) {
-			Iones = null;
-		}
-		return Iones;
-	}
 }
