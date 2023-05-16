@@ -18,11 +18,14 @@ public class Juego extends InterfaceJuego {
 	Destructores[] destructoresArr;
 	Destructores destructor;
 	Iones[] ionesArr;
+	Corazones[] corazonesArr;
+	Corazones corazon;
 	Iones ion;
 	Fondo fondo;
 	int tiempoDest = 0;
 	int tiempoAst = 0;
 	int tiempoDestDisparo = 0;
+	int tiempoCorazon = 0;
 
 	Juego() {
 		// Inicializa el objeto entorno
@@ -61,6 +64,8 @@ public class Juego extends InterfaceJuego {
 
 		tiempoDestDisparo++;
 
+		tiempoCorazon++;
+		
 		// dibujo el fondo
 		fondo.dibujar(entorno);
 
@@ -152,14 +157,31 @@ public class Juego extends InterfaceJuego {
 		// regenero los iones que impactan o estan fuera de pantalla
 
 		for (int i = 0; i < ionesArr.length; i++) {
-			if (ionesArr[i] == null) {
-				ionesArr[i] = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
+			try {
+				if (ionesArr[i] == null && destructoresArr[i] != null) {
+					ionesArr[i] = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
 
-			} else {
-				//ionesArr[i].fueraDePantalla(ionesArr[i]);
-				Iones ionNew = ionesArr[i];
-				ionesArr[i].fueraDePantalla(ionesArr[i]);
-				ionesArr[i] = ionNew;
+				} else {
+					Iones ionNew = ionesArr[i];
+					ionesArr[i].fueraDePantalla(ionesArr[i]);
+					ionesArr[i] = ionNew;
+
+				}
+			} catch (Exception ArrayIndexOutOfBounds) {
+				
+				}
+		}
+		
+//		dibujo los corazones
+		
+		if (corazonesArr != null) {
+			if(corazonesArr[0] != null) {
+				corazonesArr[0].dibujarCorazones(entorno);
+				corazonesArr[0].mover();
+				if(corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
+					navecita.setVidas(navecita.getVidas() + 1);
+					corazonesArr[0] = null;
+				}
 			}
 		}
 
@@ -213,6 +235,13 @@ public class Juego extends InterfaceJuego {
 			generarAsteroides();
 			tiempoAst = 0;
 		}
+		
+		if (tiempoCorazon > 1500) {
+			generarCorazon();
+			tiempoCorazon = 0;
+			
+		}
+		
 
 		// me fijo si el jugador gano
 
@@ -283,6 +312,16 @@ public class Juego extends InterfaceJuego {
 		}
 	}
 
+	
+//	genero corazones
+	
+	public void generarCorazon() {
+		Random randomCorazones = new Random();
+		corazonesArr = new Corazones[11];
+		corazon = new Corazones((randomCorazones.nextInt(400)) + 100, randomCorazones.nextInt(200));
+		corazonesArr[0] = corazon;
+	}
+	
 	// genero destructores
 
 	public void generarDestructores() {
