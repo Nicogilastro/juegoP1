@@ -156,8 +156,10 @@ public class Juego extends InterfaceJuego {
 				ionesArr[i] = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
 
 			} else {
+				//ionesArr[i].fueraDePantalla(ionesArr[i]);
+				Iones ionNew = ionesArr[i];
 				ionesArr[i].fueraDePantalla(ionesArr[i]);
-
+				ionesArr[i] = ionNew;
 			}
 		}
 
