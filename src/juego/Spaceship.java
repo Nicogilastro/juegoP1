@@ -32,33 +32,8 @@ public class Spaceship {
 	}
 
 	public void aumentarVelocidad() {
-		this.velocidad += this.velocidad * 1.1;
+		this.velocidad += 0.25;
 	}
-
-	// getters y setters
-	// public double getX() {
-	// return x;
-	// }
-
-	// public void setX(double x) {
-	// this.x = x;
-	// }
-
-	// public double getY() {
-	// return y;
-	// }
-
-	// public void setY(double y) {
-	// this.y = y;
-	// }
-
-	// public double getVelocidad() {
-	// return velocidad;
-	// }
-
-	// public void setVelocidad(double velocidad) {
-	// this.velocidad = velocidad;
-	// }
 
 	public int getPuntaje() {
 		return puntaje;

@@ -20,6 +20,8 @@ public class Juego extends InterfaceJuego {
 	Iones[] ionesArr;
 	Corazones[] corazonesArr;
 	Corazones corazon;
+	RayoVeloz[] rayoArr;
+	RayoVeloz rayo;
 	Iones ion;
 	Fondo fondo;
 	int tiempoDest = 0;
@@ -58,6 +60,15 @@ public class Juego extends InterfaceJuego {
 		// Procesamiento de un instante de tiempo
 		// ...
 
+		if (navecita.getPuntaje() == 15) {
+			entorno.cambiarFont("Microsoft Yahei", 40, Color.red);
+			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
+
+			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
+			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
+
+		}
+
 		tiempoDest++;
 
 		tiempoAst++;
@@ -65,7 +76,7 @@ public class Juego extends InterfaceJuego {
 		tiempoDestDisparo++;
 
 		tiempoCorazon++;
-		
+
 		// dibujo el fondo
 		fondo.dibujar(entorno);
 
@@ -168,19 +179,33 @@ public class Juego extends InterfaceJuego {
 
 				}
 			} catch (Exception ArrayIndexOutOfBounds) {
-				
-				}
+
+			}
 		}
-		
-//		dibujo los corazones
-		
+
+		// dibujo los corazones
+
 		if (corazonesArr != null) {
-			if(corazonesArr[0] != null) {
+			if (corazonesArr[0] != null) {
 				corazonesArr[0].dibujarCorazones(entorno);
 				corazonesArr[0].mover();
-				if(corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
+				if (corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
 					navecita.setVidas(navecita.getVidas() + 1);
 					corazonesArr[0] = null;
+				}
+			}
+		}
+
+		// dibujo los rayos
+
+		if (rayoArr != null) {
+			if (rayoArr[0] != null) {
+				rayoArr[0].dibujarRayos(entorno);
+				rayoArr[0].mover();
+				if (rayoArr[0].rayoHitbox().intersects(navecita.navecitaHitbox())) {
+					navecita.aumentarVelocidad();
+					navecita.p.setVelocidad(navecita.p.getVelocidad() + 0.25);
+					rayoArr[0] = null;
 				}
 			}
 		}
@@ -235,24 +260,15 @@ public class Juego extends InterfaceJuego {
 			generarAsteroides();
 			tiempoAst = 0;
 		}
-		
-		if (tiempoCorazon > 1500) {
+
+		if (tiempoCorazon > 1400) {
 			generarCorazon();
+			generarRayo();
 			tiempoCorazon = 0;
-			
+
 		}
-		
 
 		// me fijo si el jugador gano
-
-		if (navecita.getPuntaje() == 15) {
-			entorno.cambiarFont("Microsoft Yahei", 40, Color.red);
-			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
-
-			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
-			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
-
-		}
 
 	}
 
@@ -312,16 +328,24 @@ public class Juego extends InterfaceJuego {
 		}
 	}
 
-	
-//	genero corazones
-	
+	// genero corazones
+
 	public void generarCorazon() {
 		Random randomCorazones = new Random();
 		corazonesArr = new Corazones[11];
 		corazon = new Corazones((randomCorazones.nextInt(400)) + 100, randomCorazones.nextInt(200));
 		corazonesArr[0] = corazon;
 	}
-	
+
+	// genero rayos
+
+	public void generarRayo() {
+		Random randomRayo = new Random();
+		rayoArr = new RayoVeloz[11];
+		rayo = new RayoVeloz((randomRayo.nextInt(400)) + 100, randomRayo.nextInt(200));
+		rayoArr[0] = rayo;
+	}
+
 	// genero destructores
 
 	public void generarDestructores() {
@@ -395,4 +419,5 @@ public class Juego extends InterfaceJuego {
 		Juego juego = new Juego();
 
 	}
+
 }

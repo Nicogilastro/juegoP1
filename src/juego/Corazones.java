@@ -8,43 +8,43 @@ import entorno.Herramientas;
 
 public class Corazones {
 	private int x;
-	  private int y;
-	  private double velocidad = 1;
-	  Image img;
+	private int y;
+	private double velocidad = 1;
+	Image img;
 
-	  public Corazones(int startX, int startY) {
-	    this.x = startX;
-	    this.y = startY;
-	  }
+	public Corazones(int startX, int startY) {
+		this.x = startX;
+		this.y = startY;
+	}
 
-	  public double getX() {
-	    return x;
-	  }
+	public double getX() {
+		return x;
+	}
 
-	  public void setX(int x) {
-	    this.x = x;
-	  }
+	public void setX(int x) {
+		this.x = x;
+	}
 
-	  public double getY() {
-	    return y;
-	  }
+	public double getY() {
+		return y;
+	}
 
-	  public void setY(int y) {
-	    this.y = y;
-	  }
+	public void setY(int y) {
+		this.y = y;
+	}
 
-	  public void mover() {
-	    y += velocidad;
-	  }
+	public void mover() {
+		y += velocidad;
+	}
 
-	  public void dibujarCorazones(Entorno e) {
-	    img = Herramientas.cargarImagen("corazon.png");
-	    e.dibujarImagen(img, x, y, 0, 0.03);
+	public void dibujarCorazones(Entorno e) {
+		img = Herramientas.cargarImagen("corazon.png");
+		e.dibujarImagen(img, x, y, 0, 0.1);
 
-	  }
+	}
 
-	  public Rectangle corazonHitbox() {
-	    return new Rectangle(x, y, 13, 26);
+	public Rectangle corazonHitbox() {
+		return new Rectangle(x, y, 13, 26);
 
-	  }
+	}
 }

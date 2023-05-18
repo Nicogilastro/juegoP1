@@ -32,6 +32,14 @@ public class Proyectil {
 		this.y = y;
 	}
 
+	public double getVelocidad() {
+		return velocidad;
+	}
+
+	public void setVelocidad(double velocidad) {
+		this.velocidad = velocidad;
+	}
+
 	public void mover() {
 		y -= velocidad;
 	}
