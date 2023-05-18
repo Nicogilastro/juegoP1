@@ -39,7 +39,7 @@ public class Corazones {
 
 	public void dibujarCorazones(Entorno e) {
 		img = Herramientas.cargarImagen("corazon.png");
-		e.dibujarImagen(img, x, y, 0, 0.1);
+		e.dibujarImagen(img, x, y, 0, 1);
 
 	}
 

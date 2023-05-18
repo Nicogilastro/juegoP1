@@ -5,12 +5,12 @@ import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
 
-public class Fondo {
+public class fondo {
   Entorno entorno;
   Juego juego;
   Image fondo, fondo2, suelo;
 
-  public Fondo(Entorno e, Juego juego) {
+  public fondo(Entorno e, Juego juego) {
     // moverFondo();
     dibujar(e);
   }

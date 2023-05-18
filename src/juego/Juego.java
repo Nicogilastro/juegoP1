@@ -23,7 +23,7 @@ public class Juego extends InterfaceJuego {
 	RayoVeloz[] rayoArr;
 	RayoVeloz rayo;
 	Iones ion;
-	Fondo fondo;
+	fondo fondo;
 	int tiempoDest = 0;
 	int tiempoAst = 0;
 	int tiempoDestDisparo = 0;
@@ -43,7 +43,7 @@ public class Juego extends InterfaceJuego {
 
 		generarIones(destructoresArr);
 
-		fondo = new Fondo(entorno, this);
+		fondo = new fondo(entorno, this);
 
 		// Inicia el juego!
 		this.entorno.iniciar();
