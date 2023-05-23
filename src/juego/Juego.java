@@ -60,15 +60,6 @@ public class Juego extends InterfaceJuego {
 		// Procesamiento de un instante de tiempo
 		// ...
 
-		if (navecita.getPuntaje() == 15) {
-			entorno.cambiarFont("Microsoft Yahei", 40, Color.red);
-			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
-
-			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
-			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
-
-		}
-
 		tiempoDest++;
 
 		tiempoAst++;
@@ -269,7 +260,19 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// me fijo si el jugador gano
+		
+		if (navecita.getPuntaje() == 15) {
+			entorno.cambiarFont("Microsoft Yahei", 40, Color.red);
+			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
 
+			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
+			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
+			
+			tiempoCorazon = 0;
+			if(tiempoCorazon > 300) {
+				System.exit(0);
+			}
+		}
 	}
 
 	public void escribirTextoPantalla(String text, int x, int y, Entorno e) {
