@@ -40,7 +40,7 @@ public class RayoVeloz {
 
   public void dibujarRayos(Entorno e) {
     img = Herramientas.cargarImagen("rayo.png");
-    e.dibujarImagen(img, x, y, 0, 0.03);
+    e.dibujarImagen(img, x, y, 0, 0.05);
 
   }
 
