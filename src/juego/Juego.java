@@ -147,7 +147,7 @@ public class Juego extends InterfaceJuego {
 
 		for (int i = 0; i < destructoresArr.length; i++) {
 			if (destructoresArr[i] == null) {
-				destructoresArr[i] = new Destructores(random.nextInt(550) + 100,
+				destructoresArr[i] = new Destructores(random.nextInt(350) + 100,
 						random.nextInt(200 - 50) + (50), 1);
 
 			} else {
