@@ -268,10 +268,11 @@ public class Juego extends InterfaceJuego {
 			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
 			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
 			
-			tiempoCorazon = 0;
-			if(tiempoCorazon > 300) {
+			entorno.cambiarFont("Microsoft Yahei", 20, Color.red);
+			entorno.escribirTexto("Salir (s)", entorno.ancho() / 2 - 125, entorno.alto() / 2 + 150);
+			
+			if (entorno.estaPresionada('s'))
 				System.exit(0);
-			}
 		}
 	}
 
