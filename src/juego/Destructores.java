@@ -156,13 +156,14 @@ public class Destructores {
 		}
 	}
 
-	public void fueraDePantalla(Destructores[] destructoresArr, double alto) {
+	public void fueraDePantalla(Destructores[] destructoresArr, Entorno entorno) {
 		for (Destructores d : destructoresArr) {
 			if (d != null) {
-				if (d.getY() > alto) {
+				if (d.getY() > entorno.alto()) {
 					d.setY(10);
 
 				}
+
 			}
 		}
 	}

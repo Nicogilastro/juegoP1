@@ -166,7 +166,7 @@ public class Juego extends InterfaceJuego {
 
 		for (int i = 0; i < destructoresArr.length; i++) {
 			if (destructoresArr[i] != null) {
-				destructoresArr[i].fueraDePantalla(destructoresArr, entorno.alto());
+				destructoresArr[i].fueraDePantalla(destructoresArr, entorno);
 
 			}
 		}
@@ -187,33 +187,6 @@ public class Juego extends InterfaceJuego {
 					destructoresArr[i].mover(1.5);
 				} else {
 					destructoresArr[i].mover(1.5);
-				}
-			}
-		}
-
-		// dibujo los corazones
-
-		if (corazonesArr != null) {
-			if (corazonesArr[0] != null) {
-				corazonesArr[0].dibujarCorazones(entorno);
-				corazonesArr[0].mover();
-				if (corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
-					navecita.setVidas(navecita.getVidas() + 1);
-					corazonesArr[0] = null;
-				}
-			}
-		}
-
-		// dibujo los rayos
-
-		if (rayoArr != null) {
-			if (rayoArr[0] != null) {
-				rayoArr[0].dibujarRayos(entorno);
-				rayoArr[0].mover();
-				if (rayoArr[0].rayoHitbox().intersects(navecita.navecitaHitbox())) {
-					navecita.aumentarVelocidad();
-					navecita.p.setVelocidad(navecita.p.getVelocidad() + 0.25);
-					rayoArr[0] = null;
 				}
 			}
 		}
@@ -287,6 +260,32 @@ public class Juego extends InterfaceJuego {
 					destructoresArr[i].dibujarse(entorno);
 				}
 			}
+			// dibujo los corazones
+
+			if (corazonesArr != null) {
+				if (corazonesArr[0] != null) {
+					corazonesArr[0].dibujarCorazones(entorno);
+					corazonesArr[0].mover();
+					if (corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
+						navecita.setVidas(navecita.getVidas() + 1);
+						corazonesArr[0] = null;
+					}
+				}
+			}
+
+			// dibujo los rayos
+
+			if (rayoArr != null) {
+				if (rayoArr[0] != null) {
+					rayoArr[0].dibujarRayos(entorno);
+					rayoArr[0].mover();
+					if (rayoArr[0].rayoHitbox().intersects(navecita.navecitaHitbox())) {
+						navecita.aumentarVelocidad();
+						navecita.p.setVelocidad(navecita.p.getVelocidad() + 0.25);
+						rayoArr[0] = null;
+					}
+				}
+			}
 		} else {
 			entorno.cambiarFont("Microsoft Yahei", 40, Color.red);
 			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
@@ -297,8 +296,24 @@ public class Juego extends InterfaceJuego {
 			entorno.cambiarFont("Microsoft Yahei", 20, Color.red);
 			entorno.escribirTexto("Salir (s)", entorno.ancho() / 2 - 125, entorno.alto() / 2 + 150);
 
+			entorno.cambiarFont("Microsoft Yahei", 20, Color.red);
+			entorno.escribirTexto("Volver a jugar (r)", entorno.ancho() / 2 - 25, entorno.alto() / 2 + 150);
+
 			if (entorno.estaPresionada('s'))
 				System.exit(0);
+
+			if (entorno.estaPresionada('r')) {
+				gameStage = "jugando";
+				gameState = "jugando";
+				navecita.setPuntaje(0);
+				navecita.setVidas(3);
+				generarAsteroides();
+				generarDestructores();
+				generarIones(destructoresArr);
+				corazon = null;
+				rayo = null;
+			}
+
 		}
 
 	}
