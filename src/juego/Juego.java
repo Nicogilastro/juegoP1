@@ -28,6 +28,8 @@ public class Juego extends InterfaceJuego {
 	int tiempoAst = 0;
 	int tiempoDestDisparo = 0;
 	int tiempoCorazon = 0;
+	String gameState = "jugando";
+	String gameStage = "jugando";
 
 	Juego() {
 		// Inicializa el objeto entorno
@@ -56,9 +58,9 @@ public class Juego extends InterfaceJuego {
 	 * actualizar el estado interno del juego para simular el paso del tiempo
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
+
 	public void tick() {
 		// Procesamiento de un instante de tiempo
-		// ...
 
 		tiempoDest++;
 
@@ -82,60 +84,6 @@ public class Juego extends InterfaceJuego {
 		if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada('a'))
 			navecita.moverIzquierda(entorno);
 
-		// dibujo la nave
-		navecita.dibujarse(entorno);
-
-		// disparo de la nave
-
-		dibujarProyectiles(entorno);
-
-		// disparo de los destructores
-
-		dibujarIones(entorno);
-
-		// dibujo cada asteroide
-
-		Random random = new Random();
-		int rand = 0;
-		while (true) {
-			rand = random.nextInt(7 - 4) + 4;
-			if (rand != 0)
-				break;
-		}
-
-		for (int i = 0; i < asteroidesArr.length; i++) {
-			if (asteroidesArr[i] == null) {
-				asteroide = new Asteroides(random.nextInt(800), random.nextInt(200), 1, Math.PI / 4, 30);
-				asteroidesArr[i] = asteroide;
-			} else {
-				asteroidesArr[i].dibujarse(entorno);
-				asteroidesArr[i].mover(i % 2 == 0 ? 1 : -1);
-
-			}
-		}
-
-		// dibujo cada destructor
-
-		for (int i = 0; i < destructoresArr.length; i++) {
-			if (destructoresArr[i] == null) {
-				continue;
-			} else {
-				destructoresArr[i].dibujarse(entorno);
-			}
-		}
-
-		// muevo los destructores de izq a der
-
-		for (int i = 0; i < destructoresArr.length; i++) {
-			if (destructoresArr[i] != null) {
-				if (i % 2 == 0) {
-					destructoresArr[i].mover(1.5);
-				} else {
-					destructoresArr[i].mover(1.5);
-				}
-			}
-		}
-
 		// disparos destructores
 
 		Random random3 = new Random();
@@ -145,59 +93,15 @@ public class Juego extends InterfaceJuego {
 
 		// regenero los destructores que se destruyen
 
-		for (int i = 0; i < destructoresArr.length; i++) {
-			if (destructoresArr[i] == null) {
-				destructoresArr[i] = new Destructores(random.nextInt(350) + 100,
-						random.nextInt(200 - 50) + (50), 1);
+		if (navecita.getPuntaje() < 10) {
+			generarDestructoresMuertos(random3);
 
-			} else {
+		}
+
+		for (int i = 0; i < destructoresArr.length; i++) {
+			if (destructoresArr[i] != null) {
 				destructoresArr[i].destruccion(destructoresArr, navecita.proyectiles, navecita);
 
-			}
-		}
-
-		// regenero los iones que impactan o estan fuera de pantalla
-
-		for (int i = 0; i < ionesArr.length; i++) {
-			try {
-				if (ionesArr[i] == null && destructoresArr[i] != null) {
-					ionesArr[i] = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
-
-				} else {
-					Iones ionNew = ionesArr[i];
-					ionesArr[i].fueraDePantalla(ionesArr[i]);
-					ionesArr[i] = ionNew;
-
-				}
-			} catch (Exception ArrayIndexOutOfBounds) {
-
-			}
-		}
-
-		// dibujo los corazones
-
-		if (corazonesArr != null) {
-			if (corazonesArr[0] != null) {
-				corazonesArr[0].dibujarCorazones(entorno);
-				corazonesArr[0].mover();
-				if (corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
-					navecita.setVidas(navecita.getVidas() + 1);
-					corazonesArr[0] = null;
-				}
-			}
-		}
-
-		// dibujo los rayos
-
-		if (rayoArr != null) {
-			if (rayoArr[0] != null) {
-				rayoArr[0].dibujarRayos(entorno);
-				rayoArr[0].mover();
-				if (rayoArr[0].rayoHitbox().intersects(navecita.navecitaHitbox())) {
-					navecita.aumentarVelocidad();
-					navecita.p.setVelocidad(navecita.p.getVelocidad() + 0.25);
-					rayoArr[0] = null;
-				}
 			}
 		}
 
@@ -242,7 +146,7 @@ public class Juego extends InterfaceJuego {
 			System.exit(0);
 		}
 
-		if (tiempoDest > 1200) {
+		if (tiempoDest > 1200 && navecita.getPuntaje() < 5) {
 			generarDestructores();
 			tiempoDest = 0;
 		}
@@ -256,24 +160,147 @@ public class Juego extends InterfaceJuego {
 			generarCorazon();
 			generarRayo();
 			tiempoCorazon = 0;
-
 		}
 
+		// me fijo si los destructores estan fuera de pantalla
+
+		for (int i = 0; i < destructoresArr.length; i++) {
+			if (destructoresArr[i] != null) {
+				destructoresArr[i].fueraDePantalla(destructoresArr, entorno.alto());
+
+			}
+		}
+
+		Random random = new Random();
+		int rand = 0;
+		while (true) {
+			rand = random.nextInt(7 - 4) + 4;
+			if (rand != 0)
+				break;
+		}
+
+		// muevo los destructores de izq a der
+
+		for (int i = 0; i < destructoresArr.length; i++) {
+			if (destructoresArr[i] != null) {
+				if (i % 2 == 0) {
+					destructoresArr[i].mover(1.5);
+				} else {
+					destructoresArr[i].mover(1.5);
+				}
+			}
+		}
+
+		// dibujo los corazones
+
+		if (corazonesArr != null) {
+			if (corazonesArr[0] != null) {
+				corazonesArr[0].dibujarCorazones(entorno);
+				corazonesArr[0].mover();
+				if (corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
+					navecita.setVidas(navecita.getVidas() + 1);
+					corazonesArr[0] = null;
+				}
+			}
+		}
+
+		// dibujo los rayos
+
+		if (rayoArr != null) {
+			if (rayoArr[0] != null) {
+				rayoArr[0].dibujarRayos(entorno);
+				rayoArr[0].mover();
+				if (rayoArr[0].rayoHitbox().intersects(navecita.navecitaHitbox())) {
+					navecita.aumentarVelocidad();
+					navecita.p.setVelocidad(navecita.p.getVelocidad() + 0.25);
+					rayoArr[0] = null;
+				}
+			}
+		}
+
+		// regenero los iones que impactan o estan fuera de pantalla
+
+		for (int i = 0; i < ionesArr.length; i++) {
+			try {
+				if (ionesArr[i] == null && destructoresArr[i] != null) {
+					ionesArr[i] = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
+
+				} else {
+					Iones ionNew = ionesArr[i];
+					ionesArr[i].fueraDePantalla(ionesArr[i]);
+					ionesArr[i] = ionNew;
+
+				}
+			} catch (Exception ArrayIndexOutOfBounds) {
+
+			}
+		}
+
+		// me fijo en que momento del juego esta el jugador
+		if (navecita.getPuntaje() < 10) {
+			gameStage = "fin";
+		}
 		// me fijo si el jugador gano
-		
-		if (navecita.getPuntaje() == 15) {
+
+		int sumadorDestructores = 0;
+		for (int i = 0; i < destructoresArr.length; i++) {
+			if (destructoresArr[i] == null) {
+				sumadorDestructores++;
+			}
+		}
+
+		if (sumadorDestructores == destructoresArr.length) {
+			gameState = "gano";
+		}
+
+		if (gameState != "gano") {
+			// dibujo la nave
+			navecita.dibujarse(entorno);
+
+			// disparo de la nave
+
+			dibujarProyectiles(entorno);
+
+			// disparo de los destructores
+
+			dibujarIones(entorno);
+
+			// dibujo cada asteroide
+
+			for (int i = 0; i < asteroidesArr.length; i++) {
+				if (asteroidesArr[i] == null) {
+					asteroide = new Asteroides(random.nextInt(800), random.nextInt(200), 1, Math.PI / 4, 30);
+					asteroidesArr[i] = asteroide;
+				} else {
+					asteroidesArr[i].dibujarse(entorno);
+					asteroidesArr[i].mover(i % 2 == 0 ? 1 : -1);
+
+				}
+			}
+
+			// dibujo cada destructor
+
+			for (int i = 0; i < destructoresArr.length; i++) {
+				if (destructoresArr[i] == null) {
+					continue;
+				} else {
+					destructoresArr[i].dibujarse(entorno);
+				}
+			}
+		} else {
 			entorno.cambiarFont("Microsoft Yahei", 40, Color.red);
 			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
 
 			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
 			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
-			
+
 			entorno.cambiarFont("Microsoft Yahei", 20, Color.red);
 			entorno.escribirTexto("Salir (s)", entorno.ancho() / 2 - 125, entorno.alto() / 2 + 150);
-			
+
 			if (entorno.estaPresionada('s'))
 				System.exit(0);
 		}
+
 	}
 
 	public void escribirTextoPantalla(String text, int x, int y, Entorno e) {
@@ -369,6 +396,16 @@ public class Juego extends InterfaceJuego {
 					random.nextInt(200), 1);
 			destructoresArr[i] = destructor;
 
+		}
+	}
+
+	public void generarDestructoresMuertos(Random random3) {
+		for (int i = 0; i < destructoresArr.length; i++) {
+			if (destructoresArr[i] == null) {
+				destructoresArr[i] = new Destructores(random3.nextInt(350) + 100,
+						random3.nextInt(200 - 50) + (50), 1);
+
+			}
 		}
 	}
 
