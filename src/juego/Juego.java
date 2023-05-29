@@ -25,7 +25,7 @@ public class Juego extends InterfaceJuego {
 	RayoVeloz[] rayoArr;
 	RayoVeloz rayo;
 	Iones ion;
-	fondo fondo;
+	Fondo fondo;
 	int tiempoDest = 0;
 	int tiempoAst = 0;
 	int tiempoDestDisparo = 0;
@@ -47,7 +47,7 @@ public class Juego extends InterfaceJuego {
 
 		generarIones(destructoresArr);
 
-		fondo = new fondo(entorno, this);
+		fondo = new Fondo(entorno, this);
 
 		// Musica de fondo , declaro e inicializo
 		File file = new File("src/espacio.wav");
