@@ -2,6 +2,14 @@ package juego;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -24,6 +32,14 @@ public class Spaceship {
 		this.vidas = vidas;
 		this.velocidad = velocidad;
 		img1 = Herramientas.cargarImagen("nave.png");
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 	public void dibujarse(Entorno entorno) {
@@ -83,10 +99,16 @@ public class Spaceship {
 
 	// disparo
 
-	public void disparar() {
+	public void disparar() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		if (puedeDisparar) {
 			p = new Proyectil((int) x, (int) y);
 			proyectiles[0] = p;
+			// Se declara y usa sonido proyectil
+			File file2 = new File("src/proyectil.wav");
+			AudioInputStream audioStream2 = AudioSystem.getAudioInputStream(file2);
+			Clip clipProyectil = AudioSystem.getClip();
+			clipProyectil.open(audioStream2);
+			clipProyectil.start();
 		}
 		puedeDisparar = false;
 	}

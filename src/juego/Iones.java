@@ -2,6 +2,10 @@ package juego;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -37,7 +41,7 @@ public class Iones {
     y += velocidad;
   }
 
-  public void dibujarIones(Entorno e) {
+  public void dibujarIones(Entorno e) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
     img = Herramientas.cargarImagen("ion.png");
     e.dibujarImagen(img, x, y, 0, 0.10);
 

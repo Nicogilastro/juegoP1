@@ -2,6 +2,14 @@ package juego;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -117,7 +125,8 @@ public class Destructores {
 	public void superponenDest(Destructores[] destructoresArr) {
 		for (int i = 0; i < destructoresArr.length; i++) {
 			for (int j = 1; j < destructoresArr.length; j++) {
-				if (destructoresArr[i] != null && destructoresArr[j] != null && destructoresArr[i] != destructoresArr[j]) {
+				if (destructoresArr[i] != null && destructoresArr[j] != null
+						&& destructoresArr[i] != destructoresArr[j]) {
 					if (j >= destructoresArr.length) {
 						j = 0;
 					}
@@ -130,7 +139,8 @@ public class Destructores {
 		}
 	}
 
-	public void destruccion(Destructores[] destructoresArr, Proyectil[] proyectilesArr, Spaceship navecita) {
+	public void destruccion(Destructores[] destructoresArr, Proyectil[] proyectilesArr, Spaceship navecita)
+			throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		for (int i = 0; i < destructoresArr.length; i++) {
 			for (int j = 0; j < proyectilesArr.length; j++) {
 				if (destructoresArr[i] == null || proyectilesArr[j] == null) {
@@ -142,6 +152,13 @@ public class Destructores {
 						destructoresArr[i] = null;
 						proyectilesArr[0] = null;
 
+						// DECLARO E INICIALIZO SONIDO DE DESTRUCCION
+						File file5 = new File("src/explocion.wav");
+						AudioInputStream audioStream5 = AudioSystem.getAudioInputStream(file5);
+						Clip clipExplocion = AudioSystem.getClip();
+						clipExplocion.open(audioStream5);
+						clipExplocion.start();
+
 					}
 				}
 
@@ -149,10 +166,12 @@ public class Destructores {
 		}
 	}
 
-	public void disparo(Destructores destructor, Iones ion) {
+	public void disparo(Destructores destructor, Iones ion)
+			throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		if (destructor != null && ion != null) {
 			ion.setX((int) destructor.getX());
 			ion.setY((int) destructor.getY());
+
 		}
 	}
 

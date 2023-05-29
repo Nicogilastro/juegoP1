@@ -15,21 +15,10 @@ public class fondo {
     dibujar(e);
   }
 
-  // //Movimiento del fondo
-  // public void moverFondo() {
-  // x -=2;
-  // x2 -=2;
-  // if(x == -620) {
-  // x = 1250;
-  //
-  // }
-  // if(x2== -620) {
-  // x2= 1250;
-  // }
-  //
-  // }
-
   // Dibujar el fondo en pantalla
+  /**
+   * @param e
+   */
   public void dibujar(Entorno e) {
     fondo = Herramientas.cargarImagen("fondo.jpg");
 

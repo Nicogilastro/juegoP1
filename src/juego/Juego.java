@@ -2,7 +2,9 @@ package juego;
 
 import java.awt.Color;
 import java.util.Random;
-
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.*;
 import entorno.Entorno;
 import entorno.InterfaceJuego;
 
@@ -31,7 +33,7 @@ public class Juego extends InterfaceJuego {
 	String gameState = "jugando";
 	String gameStage = "jugando";
 
-	Juego() {
+	Juego() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo 3 - v1", 600, 1000);
 
@@ -47,16 +49,23 @@ public class Juego extends InterfaceJuego {
 
 		fondo = new fondo(entorno, this);
 
+		// Musica de fondo , declaro e inicializo
+		File file = new File("src/espacio.wav");
+		AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+		Clip clipFondo = AudioSystem.getClip();
+		clipFondo.open(audioStream);
+		clipFondo.start();
+
 		// Inicia el juego!
 		this.entorno.iniciar();
 
 	}
 
 	/**
-	 * Durante el juego, el método tick() será ejecutado en cada instante y
-	 * por lo tanto es el método más importante de esta clasentorno. Aquí se debe
-	 * actualizar el estado interno del juego para simular el paso del tiempo
-	 * (ver el enunciado del TP para mayor detalle).
+	 * Durante el juego, el método tick() será ejecutado en cada instante y por lo
+	 * tanto es el método más importante de esta clasentorno. Aquí se debe
+	 * actualizar el estado interno del juego para simular el paso del tiempo (ver
+	 * el enunciado del TP para mayor detalle).
 	 */
 
 	public void tick() {
@@ -76,7 +85,12 @@ public class Juego extends InterfaceJuego {
 		// Comportamiento de las teclas
 
 		if (entorno.estaPresionada(entorno.TECLA_ESPACIO))
-			navecita.disparar();
+			try {
+				navecita.disparar();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+
+				e.printStackTrace();
+			}
 
 		if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada('d'))
 			navecita.moverDerecha(entorno);
@@ -88,9 +102,14 @@ public class Juego extends InterfaceJuego {
 
 		Random random3 = new Random();
 		int probDisparo = random3.nextInt(100 - 1) + 1;
-		if (tiempoDest / 100 == 2 % 1)
-			destructoresDisparos(probDisparo);
+		if (tiempoDest / 100 == 2 % 1) {
+			try {
+				destructoresDisparos(probDisparo);
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 
+				e.printStackTrace();
+			}
+		}
 		// regenero los destructores que se destruyen
 
 		if (navecita.getPuntaje() < 10) {
@@ -100,7 +119,12 @@ public class Juego extends InterfaceJuego {
 
 		for (int i = 0; i < destructoresArr.length; i++) {
 			if (destructoresArr[i] != null) {
-				destructoresArr[i].destruccion(destructoresArr, navecita.proyectiles, navecita);
+				try {
+					destructoresArr[i].destruccion(destructoresArr, navecita.proyectiles, navecita);
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+
+					e.printStackTrace();
+				}
 
 			}
 		}
@@ -215,14 +239,14 @@ public class Juego extends InterfaceJuego {
 		}
 		// me fijo si el jugador gano
 
-		int sumadorDestructores = 0;
+		int sumadorDestructoresNull = 0;
 		for (int i = 0; i < destructoresArr.length; i++) {
 			if (destructoresArr[i] == null) {
-				sumadorDestructores++;
+				sumadorDestructoresNull++;
 			}
 		}
 
-		if (sumadorDestructores == destructoresArr.length) {
+		if (sumadorDestructoresNull == destructoresArr.length) {
 			gameState = "gano";
 		}
 
@@ -236,7 +260,12 @@ public class Juego extends InterfaceJuego {
 
 			// disparo de los destructores
 
-			dibujarIones(entorno);
+			try {
+				dibujarIones(entorno);
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+
+				e1.printStackTrace();
+			}
 
 			// dibujo cada asteroide
 
@@ -269,6 +298,30 @@ public class Juego extends InterfaceJuego {
 					if (corazonesArr[0].corazonHitbox().intersects(navecita.navecitaHitbox())) {
 						navecita.setVidas(navecita.getVidas() + 1);
 						corazonesArr[0] = null;
+
+						// SONIDO CORAZON AL AGARRAR
+						File file4 = new File("src/corazon.wav");
+						AudioInputStream audioStream4 = null;
+						try {
+							audioStream4 = AudioSystem.getAudioInputStream(file4);
+						} catch (UnsupportedAudioFileException | IOException e) {
+
+							e.printStackTrace();
+						}
+						Clip clipCorazon = null;
+						try {
+							clipCorazon = AudioSystem.getClip();
+						} catch (LineUnavailableException e) {
+
+							e.printStackTrace();
+						}
+						try {
+							clipCorazon.open(audioStream4);
+						} catch (LineUnavailableException | IOException e) {
+
+							e.printStackTrace();
+						}
+						clipCorazon.start();
 					}
 				}
 			}
@@ -283,6 +336,29 @@ public class Juego extends InterfaceJuego {
 						navecita.aumentarVelocidad();
 						navecita.p.setVelocidad(navecita.p.getVelocidad() + 0.25);
 						rayoArr[0] = null;
+						File file6 = new File("src/rayo.wav");
+						AudioInputStream audioStream6 = null;
+						try {
+							audioStream6 = AudioSystem.getAudioInputStream(file6);
+						} catch (UnsupportedAudioFileException | IOException e) {
+
+							e.printStackTrace();
+						}
+						Clip clipRayo = null;
+						try {
+							clipRayo = AudioSystem.getClip();
+						} catch (LineUnavailableException e) {
+
+							e.printStackTrace();
+						}
+						try {
+							clipRayo.open(audioStream6);
+						} catch (LineUnavailableException | IOException e) {
+
+							e.printStackTrace();
+						}
+						clipRayo.start();
+
 					}
 				}
 			}
@@ -291,7 +367,8 @@ public class Juego extends InterfaceJuego {
 			entorno.escribirTexto("YOU WIN!!", entorno.ancho() / 2 - 125, entorno.alto() / 2);
 
 			entorno.cambiarFont("Microsoft Yahei", 30, Color.red);
-			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125, entorno.alto() / 2 + 50);
+			entorno.escribirTexto("Puntaje: " + navecita.getPuntaje(), entorno.ancho() / 2 - 125,
+					entorno.alto() / 2 + 50);
 
 			entorno.cambiarFont("Microsoft Yahei", 20, Color.red);
 			entorno.escribirTexto("Salir (s)", entorno.ancho() / 2 - 125, entorno.alto() / 2 + 150);
@@ -309,9 +386,16 @@ public class Juego extends InterfaceJuego {
 				navecita.setVidas(3);
 				generarAsteroides();
 				generarDestructores();
-				generarIones(destructoresArr);
+				try {
+					generarIones(destructoresArr);
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+
+					e.printStackTrace();
+				}
 				corazon = null;
 				rayo = null;
+				navecita.setX(entorno.ancho() / 2);
+				navecita.setY(entorno.alto() - 100);
 			}
 
 		}
@@ -337,20 +421,21 @@ public class Juego extends InterfaceJuego {
 
 	}
 
-	public void dibujarIones(Entorno e) {
+	public void dibujarIones(Entorno e) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		if (ionesArr != null) {
 			for (int i = 0; i < ionesArr.length; i++) {
 				if (ionesArr[i] != null) {
 					ionesArr[i].dibujarIones(e);
 					ionesArr[i].mover();
 					ionesArr[i] = ionesArr[i].fueraDePantalla(ionesArr[i]);
-
 				}
+
 			}
 		}
 	}
 
-	public void destructoresDisparos(int probDisparo) {
+	public void destructoresDisparos(int probDisparo)
+			throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		if (navecita.getVidas() != 0) {
 			if (probDisparo == 10) {
 				Random random = new Random();
@@ -407,8 +492,7 @@ public class Juego extends InterfaceJuego {
 		destructoresArr = new Destructores[rand2];
 
 		for (int i = 0; i < rand2; i++) {
-			destructor = new Destructores((random.nextInt(400)) + 100,
-					random.nextInt(200), 1);
+			destructor = new Destructores((random.nextInt(400)) + 100, random.nextInt(200), 1);
 			destructoresArr[i] = destructor;
 
 		}
@@ -417,8 +501,7 @@ public class Juego extends InterfaceJuego {
 	public void generarDestructoresMuertos(Random random3) {
 		for (int i = 0; i < destructoresArr.length; i++) {
 			if (destructoresArr[i] == null) {
-				destructoresArr[i] = new Destructores(random3.nextInt(350) + 100,
-						random3.nextInt(200 - 50) + (50), 1);
+				destructoresArr[i] = new Destructores(random3.nextInt(350) + 100, random3.nextInt(200 - 50) + (50), 1);
 
 			}
 		}
@@ -453,7 +536,8 @@ public class Juego extends InterfaceJuego {
 
 	// genero iones
 
-	public void generarIones(Destructores[] destructoresArr) {
+	public void generarIones(Destructores[] destructoresArr)
+			throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		// array de iones
 		ionesArr = new Iones[destructoresArr.length];
 
@@ -461,17 +545,19 @@ public class Juego extends InterfaceJuego {
 			if (destructoresArr[i] != null) {
 				Iones ion = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
 				ionesArr[i] = ion;
+
 			}
 
 			if (ionesArr[i] == null) {
 				Iones ion = new Iones((int) destructoresArr[i].getX(), (int) destructoresArr[i].getY());
 				ionesArr[i] = ion;
+
 			}
 		}
 	}
 
 	@SuppressWarnings("unused")
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		Juego juego = new Juego();
 
 	}
